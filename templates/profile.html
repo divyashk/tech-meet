@@ -1,0 +1,455 @@
+{% extends 'layouts/base.html' %}
+
+{% block css %}
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap");
+
+  .main-profile {
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+    position: relative;
+  }
+
+  .asked {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    max-width: 777px;
+    flex-direction: column;
+    background-color: var(--box-color);
+    padding: 48px;
+    margin: 32px 12px;
+    border-radius: 33px;
+    width: 100%;
+  }
+
+  .asked_profile {
+    display: flex;
+    align-items: center;
+  }
+
+  .asked_profile-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .asked_profile-content h3 {
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 32px;
+  }
+
+  .asked_profile-content button {
+    border: 2px solid #0f1c52;
+    background-color: transparent;
+    padding: 15px 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 7px;
+  }
+
+  .asked_profile-content button:hover {
+    color: white;
+    transition-duration: 350ms;
+  }
+
+  .asked_footer ul {
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    margin-top: 16px;
+    border-top: 2px solid #ccd1e6;
+    border-bottom: 2px solid #ccd1e6;
+  }
+
+  .asked_footer ul li {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 15px;
+    cursor: pointer;
+  }
+
+  .asked_footer ul li:hover {
+    transition-duration: 300ms;
+  }
+
+  .asked_footer ul li:last-child .down {
+    margin-left: 11px;
+  }
+
+  #profile-tab {
+    width: 100%;
+  }
+
+  /* Style tab links */
+  .tablink {
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 100%;
+    background-color: var(--lightr-shade);
+  }
+
+  .tablink:hover {
+    background-color: var(--normal-shade);
+    ;
+  }
+
+  /* Style the tab content (and add height:100% for full page content) */
+  .tabcontent {
+    color: black;
+    display: none;
+    padding: 32px 20px;
+    height: 100%;
+  }
+
+  .rating {
+    color: orange;
+  }
+
+  .rating-input {
+    color: orange;
+    cursor: pointer;
+  }
+
+  .profile-right {
+    text-align: right;
+    margin-top: 32px;
+  }
+</style>
+
+{% endblock %}
+
+{% block body %}
+<div class="main-profile">
+  <div class="asked">
+
+
+
+    <div class="asked_footer">
+      <ul>
+        <li><button class="tablink" onclick="openPage('Home', this)" id="defaultOpen">Profile</button></li>
+        <li><button class="tablink" id="leads-tab" onclick="openPage('About', this)"> Leads Added </button></li>
+      </ul>
+    </div>
+
+    <div>
+
+      <div id="Home" class="tabcontent">
+        <div class="profile-content row">
+          <div class="profile-left col s6">
+            <div class="asked_profile">
+              <div class="asked_profile-content">
+                <img src="" id="pp" style="width:100%">
+                <h3 id="show-name-here" style="margin-bottom: 4px;"></h3>
+                <div class="rating"></div>
+              </div>
+            </div>
+            <p id="show-phone-here"> <i class="material-icons prefix" style="vertical-align: middle;">phone</i></p>
+          </div>
+          <div class="profile-right col s6">
+            <div id="rat-inp-con">
+              Ratings given by me
+              <div class="rating-input"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="About" class="tabcontent">
+        <h3>Leads</h3>
+        <div id="profile-leads"></div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+  if (location.hash == "#About") {
+    document.getElementById("leads-tab").click();
+  } else {
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+  }
+
+
+  function openPage(pageName, elmnt) {
+    console.log("Open page callsed");
+
+    // Hide all elements with class="tabcontent" by default */
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    location.hash = pageName;
+
+    // Remove the background color of all tablinks/buttons
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].style.backgroundColor = "";
+    }
+
+    // Show the specific tab content
+    document.getElementById(pageName).style.display = "block";
+
+    // Add the specific color to the button used to open the tab content
+    elmnt.style.backgroundColor = "#26a69a";
+  }
+
+  const db = firebase.firestore();
+  const username = "{{username}}";
+  const isMe = "{{ isMe }}";
+  const loginuser = "{{ loginuser }}";
+
+  var leadsData = [];
+
+  handleUpdate = (index) => {
+    // Find the index from leadsdata
+    const leadId = leadsData[index].leadId;
+    const item = leadsData[index].item;
+    const state = leadsData[index].state;
+    const city = leadsData[index].city;
+    const qty = leadsData[index].quantity;
+    const address = leadsData[index].address;
+    const contact = leadsData[index].contact;
+    const name = leadsData[index].name;
+    location.href = "/add?id=" + leadId + "&item=" + item + "&state=" + state + "&city=" + city + "&qty=" + qty + "&address=" + address + "&contact=" + contact + "&name=" + name;
+  }
+
+  handleRemove = (index) => {
+    // Find the index from leadsdata
+    const leadId = leadsData[index].leadId;
+
+    // const referenceId = "Inventory/" + item + "/" + state + "/" + city + "/" + leadId;
+    // console.log("delete item", referenceId);
+
+    data = {
+      leadId: leadId,
+    }
+    var payload = {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }
+    
+    fetch('/delete_lead_api', payload)
+      .then(res => res.json())
+      .then(res => {
+        console.log('Get leads success', res);
+        if (res['success']) {
+          console.log("successful request");
+          location.reload();
+        }
+      })
+      .catch(err => {
+        console.log("Error in get_leads_api");
+      });
+    console.log("Submitted!");
+  }
+
+  updatePosts = (val, index) => {
+    leadsData.push(val);
+    let toAdd = "";
+
+    var upVoteClass = "";
+    var downVoteClass = "";
+
+    if (username) {
+      console.log("username found", username);
+
+      var myVote = val.votes[username];
+      if (myVote && myVote == 1) {
+        upVoteClass = "color-green";
+        leadsData[index].cur_status = 1;
+      } else if (myVote && myVote == -1) {
+        leadsData[index].cur_status = -1;
+        downVoteClass = "color-red";
+      } else {
+        leadsData[index].cur_status = 0;
+      }
+    }
+
+    var rightRow = "";
+
+    if (isMe == "yes") {
+      rightRow = `<div class="right-row">
+      <div class="edit-item" onclick="handleUpdate(` + index + `, 1)">
+          <span class="material-icons color-blue">
+              edit
+          </span>
+      </div>
+      <div class="up-vote-count">` + val.net_upvotes + `</div>
+      <div class="remove-item" onclick="handleRemove(` + index + `, -1)">
+          <span class="material-icons color-red">
+              delete
+          </span>
+      </div>
+    </div>`;
+    }
+
+    toAdd += `
+      <div class="col s12 m6">
+          <div class="card horizontal">                      
+              <div class="card-stacked">
+                <div class="card-content">
+                  <div class="card-head"> ` + val.item + " x " + val.quantity + ` </div>
+                  <p>` + val.name + `</p>
+                  <div class="address" style="margin-top: 12px">
+                      <a target="_none" rel="noopener" href="https://www.google.com/maps/search/` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + `">` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + ` <span class="material-icons my-loc-icon">location_on</span> ` + `</a>
+                  </div>
+              </div>
+              <div class="card-action">
+                  <i class="material-icons prefix" style="vertical-align: middle;">phone</i>
+                  <a href= tel:` + val.contact + `>` + val.contact + `</a>
+              </div>
+              </div>
+              ` + rightRow + `
+          </div>
+      </div>
+      `;
+
+    $("#profile-leads").append(toAdd);
+
+  }
+
+
+  getRatingString = (start = 0, end = 4) => {
+    let ratingString = "";
+
+    for (let i = 0; i < start; i++) {
+      ratingString += `
+        <span class="material-icons">
+          star
+        </span>`
+    }
+
+    for (let i = start; i <= end; i++) {
+      ratingString += `
+        <span class="material-icons">
+          star_border
+        </span>`
+    }
+
+    return ratingString;
+  }
+
+  db.collection("users").doc(username).get()
+    .then(doc => {
+      console.log("Doc", doc.data());
+
+      const data = doc.data();
+
+      $("#show-name-here").html(data.name);
+      $("#show-phone-here").html(`<i class="material-icons prefix" style="vertical-align: middle;">phone</i> <a href= tel:` + data.phone + `>` + data.phone + `</a>`);
+      $("#pp").prop("src" , data.image);
+      // Ratings
+      if (data.net_rating) {
+        $(".rating").html(getRatingString(data.net_rating));
+      } else {
+        $(".rating").html(getRatingString());
+      }
+
+      if (data.rating && loginuser && data.rating[loginuser]) {
+        $(".rating-input").html(getRatingString(data.rating[loginuser]));
+      } else {
+        $(".rating-input").html(getRatingString());
+      }
+
+      // Now loop in rating input
+      const stars = document.getElementsByClassName("rating-input")[0].getElementsByTagName("span");
+
+      console.log("stars", stars);
+      for (let i = 0; i < stars.length; i++) {
+        stars[i].onclick = function () {
+          console.log("give rating", i + 1);
+
+          // Sending api request to backend to update rating
+
+          pdata = {
+            rating: (i+1),
+            reviewer: loginuser,
+            reviewed: username
+          }
+          var payload = {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pdata),
+          }
+
+          fetch('/update_rating', payload)
+            .then(res => res.json())
+            .then(res => {
+              console.log('Get leads success', res);
+              if (res['success']) {
+                console.log("successful request");
+                location.reload();
+              }
+            })
+            .catch(err => {
+              console.log("Error in get_leads_api");
+            });
+          console.log("Submitted!");
+
+
+        }
+      }
+
+
+      // hide the rating by me for not logined
+      if (!loginuser) {
+        $("#rat-inp-con").css("display", "none");
+      }
+
+
+      // Leads should be present
+      if (!data.leads) {
+        console.log("No leads found for this profile");
+      } else {
+        // leads do exist
+        data.leads.forEach((val, index) => {
+          const refs = val.split("/");
+          console.log("REfs are", refs);
+
+          db.collection(refs[0]).doc(refs[1]).collection(refs[2]).doc(refs[3]).collection(refs[4]).doc(refs[5])
+            .get().then(doc2 => {
+              console.log(doc2.data());
+              var dic2 = doc2.data();
+              dic2["leadId"] = refs[5];
+              updatePosts(dic2, index);
+            })
+            .catch(err => {
+              console.log("error came", err);
+            });
+        })
+      }
+
+    }).catch(err => {
+      console.log("Error came while fetching", err);
+    });
+
+</script>
+{% endblock %}
