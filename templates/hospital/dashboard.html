@@ -138,9 +138,9 @@
 
     <div class="asked_footer">
       <ul>
-        <li><button class="tablink" onclick="openPage('Home', this)" id="defaultOpen">Profile</button></li>
-        <li><button class="tablink" id="leads-tab" onclick="openPage('About', this)"> Leads Added </button></li>
-        <li><button class="tablink" id="leads-tab" onclick="openPage('About', this)"> Leads Added </button></li>
+        <li><button class="tablink" onclick="openPage('meds', this)" id="defaultOpen">Inventory</button></li>
+        <li><button class="tablink" id="leads-tab" onclick="openPage('About', this)"> Doctor details </button></li>
+        <li><button class="tablink" id="leads-tab" onclick="openPage('About', this)"> Room Info </button></li>
       </ul>
     </div>
 
@@ -167,46 +167,8 @@
         </div>
       </div>
 
-      <div class="col s12 m6" id="lead` + val.leadId + `">
-        <div class="card horizontal">                      
-            <div class="card-stacked">
-                <div class="card-content">
-                    <div class="card-head"></div>
-                    <a class="profile-link" href="/profile/` + val.username + `">` + val.name + `</a>
-                    <div class="address" style="margin-top: 12px">
-                        <a target="_none" rel="noopener" href="https://www.google.com/maps/search/` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + `">` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + ` <span class="material-icons my-loc-icon">location_on</span> ` + `</a>
-                    </div>
-                </div>
-                <div class="card-action">
-                    <div>
-                    <i class="material-icons prefix" style="vertical-align: middle;">phone</i>
-                    <a href= tel:` + val.contact + `>` + val.contact + `</a>
-                    </div>
-                    <div style="margin-left: auto; cursor: pointer;" onclick="openModal(` + index + `, event)">
-                        ` + (Boolean(val.comments) ? (val.comments.length) : 0) + `
-                        <span class="material-icons" style="vertical-align: middle">comment</span>
-                        <span class="material-icons" style="vertical-align: middle; margin-bottom:7px;">add_a_photo</span>
-                    </div>
-                </div>
-            </div>
-            <div class="right-row">
-                <div class="upvote ` + upVoteClass + `" onclick="handleVote(` + index + `, 1) ">
-                    <span class="material-icons">
-                        expand_less
-                    </span>
-                </div>
-
-                <div class="up-vote-count">
-                    ` + val.net_upvotes + `
-                 </div>
-
-                <div class="downvote ` + downVoteClass + `" onclick="handleVote(` + index + `, -1)">
-                    <span class="material-icons">
-                        expand_more
-                    </span>
-                </div>
-            </div>
-        </div>
+      <div class="Inventory" id="meds">
+        <!-- Cards will be added here by javascript -->
     </div>
     
 
@@ -269,6 +231,43 @@
 
   var leadsData = [];
 
+  fetch(`/hospital/${username}/meds`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("all meds data", data);
+
+      const allMedsData = data.allMedsData;
+
+      let allMedsDataHTML = "";
+      for(let i=0; i < allMedsData.length; i++) {
+        allMedsDataHTML += `
+        <div class="card horizontal">                      
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <div class="card-head"> ${allMedsData[i].item_name} </div>
+                        
+                        <div class="address" style="margin-top: 12px">
+                        </div>
+                    </div>
+                    <div class="card-action">
+                        <div>
+                        
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        `;
+      }
+
+      document.getElementById("meds").innerHTML = allMedsDataHTML;
+
+    }).catch(err => {
+      console.log("Error", err);
+    });
+        
+
+  
 
 
 </script>
