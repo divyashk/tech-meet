@@ -63,6 +63,7 @@ def register_user():
     @json needed
     - password
     - username
+    - type
     - Rest any other details like name, etc
     '''
     print("Hello")
@@ -85,6 +86,7 @@ def register_user():
 
         session['logged_in'] = True
         session['username'] = data['username']
+        session['type'] = data['type']
         return jsonify(success=True)
     else:
         return jsonify(success=False, err_code='0')
@@ -336,15 +338,16 @@ Routes
 def give_favicon():
     return send_file('static/download.png')
 
-# @app.route('/')
-# @app.route('/find')
-# def find():
-#     username = ""
+@app.route('/')
+@app.route('/find')
+def find():
+    username = ""
 
-#     if ("username" in session):
-#         username = session["username"]
-
-#     return render_template('find.html', username=username)
+    if ("username" in session):
+        username = session["username"]
+        render_template('find.html', username=username)
+    else:
+        return render_template('index.html', username=username)
 
 # @app.route('/add', methods=['GET'])
 # @is_logged_in
@@ -392,8 +395,10 @@ def login_register():
         return redirect(url_for("profile"))
 
     data = request.json
-    pass_hash = db.collection("users").document(
-        data["username"]).get().to_dict()['password']
+    fire_req_data = db.collection("users").document(
+        data["username"]).get().to_dict()
+    pass_hash = fire_req_data['password']
+
     if sha256_crypt.verify(data["password"], pass_hash):
 
         if data["username"] == "root":
@@ -403,6 +408,7 @@ def login_register():
 
         session['logged_in'] = True
         session['username'] = data['username']
+        session['type'] = data['type']
         return jsonify(success=True)
     else:
         return jsonify(success=False)
