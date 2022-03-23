@@ -11,24 +11,59 @@ db = firestore.client()
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
-# Functions
-def test_fun():
-    return "Hello"
 
 # APIs
 
 '''
-    Desc : Get the data from the request body in JSON Format
+    Desc : Add item to inventory
     @json 
     {
-        parameter1 : "p1_val"
-        parameter2 : "p2_val"    
+        {
+            id : "some unique"  
+            item_name : "paracetemol",
+            quantity : 10,
+            price : "Rs 100" 
+        },
+        dispensary: "name"
     }
 '''
-@app.route('/api-route-1', methods=['GET'])
-def register_user():
+@app.route('/add', methods=['POST'])
+def add_item_to_inv():
     data = request.json
-    return jsonify(success=True)
+    # Add item to inventory for a particular dispensary
+    return True
+
+'''
+    Desc : 
+    @json 
+    {
+        
+        id : "some unique" ,
+        field_to_change : "field", 
+        value : "value",
+        dispensary: "name",
+    }
+'''
+@app.route('/update', methods=['PATCH'])
+def update_item_from_inv():
+    data = request.json
+    # Update an item in inventory for a particular dispensary ( for adjusting price, quantity, etc) 
+    return True
+
+
+'''
+    Desc : Add item to inventory
+    @json 
+    {
+        id : "some unique" ,
+        dispensary: "name"
+    }
+'''
+@app.route('/fetch', methods=['GET'])
+def fetch_item_from_inv(item_name):
+    data = request.json
+    # Search for an item in inventory and return
+    return True
 
 # Main
 if __name__ == '__main__':
