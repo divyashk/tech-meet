@@ -66,11 +66,12 @@ def register_user():
     - type
     - Rest any other details like name, etc
     '''
+
     print("Hello")
     data = request.json
     # image = data['image']
     # print(image)
-    compulsary_items = ["username", "password"]
+    compulsary_items = ["username", "password", "type"]
     # other fields are ["age","gender","nhid","patient_address","patient_name","phone_number"]
 
     for item in compulsary_items:
@@ -82,7 +83,7 @@ def register_user():
         data['password'] = sha256_crypt.encrypt(str(data['password']))
 
         # Update the user in the database
-        db.collection("users").document(data['username']).set(data, merge=True)
+        db.collection(type).document(data['username']).set(data, merge=True)
 
         session['logged_in'] = True
         session['username'] = data['username']
@@ -92,11 +93,11 @@ def register_user():
         return jsonify(success=False, err_code='0')
 
 
-
 @app.route('/user_info', methods=['GET', 'POST'])
 @is_logged_in
 def user_info():
-    user_info = db.collection(u'users').document(session['username']).get()
+    type = session['type']
+    user_info = db.collection(type).document(session['username']).get()
 
     if user_info.exists:
         print("User exists")
@@ -117,95 +118,6 @@ def if_logged_in():
     else:
         return jsonify(success=False)
 
-# @app.route('/add_item_api', methods=['POST'])
-# @is_logged_in
-# def add_item_api():
-#     data = request.json
-#     username = session['username']
-#     data['username'] = session['username']
-#     data['votes'] = {}
-#     data['net_upvotes'] = 0
-#     data['quantity'] = int(data['quantity'])
-#     data['time'] = int(time.time())
-#     data['weight'] = 0
-#     compulsary_items = ["username",    "name", "contact",
-#                         "item", "quantity", "city", "state"]
-
-#     for field in compulsary_items:
-#         if field not in data:
-#             return jsonify(success=False, err_code='1', msg=field + ' not passed')
-
-#     # Adding the item into the database
-#     docref = None
-#     if "itemId" in data:
-#         docref = data["itemId"]
-#     doc_ref = db.collection("Inventory").document(data['item']).collection(data['state']).document(data['city']).collection("leads").document(docref)
-#     doc_ref.set(data , merge = True)
-
-#     if "itemId" not in data:
-
-#         # Also add some randome data to the docs
-#         db.collection("Inventory").document(data['item']).set( {"desc" : "Hello world" })
-#         db.collection("Inventory").document(data['item']).collection(data['state']).document(data['city']).set({"city_desc": "Wow"})
-
-#         db.collection("users").document(username).update({"leads" : firestore.ArrayUnion([doc_ref.path])})
-#         db.collection("references").document(doc_ref.id).set({"address" : doc_ref.path})
-#     doc = db.collection("states").document(data['state']).set({"cities" : firestore.ArrayUnion([data['city']])} , merge = True)
-#     return jsonify(success=True)
-
-# @app.route('/get_leads_api', methods=['POST'])
-# def get_leads_api():
-#     data = request.json
-#     state = data['state']
-#     city = data['city']    
-#     item = data['item']
-
-#     docs = db.collection("Inventory").document(item).collection(state).document(city).collection("leads").stream()
-#     lisp = []
-#     for doc in docs:
-#         tdoc = doc.to_dict()
-#         tdoc['leadId'] = doc.id
-#         lisp.append(tdoc)
-#     lisp = sorted(lisp , key = lambda i : (-i['net_upvotes'] , -i['quantity']))
-#     if "username" in session:
-#         username = session['username']
-#         for dt in lisp:
-#             dt['status'] = 0
-#             if username in dt['votes']:
-#                 dt['status'] = dt['votes'][username]
-#     # data = {"data" : lisp}
-    
-#     return jsonify(success=True , data=lisp)
-#         # return jsonify(success=False, err_code='0')
-
-# @app.route('/vote_api', methods=['POST'])
-# @is_logged_in
-# def vote():
-#     data = request.json
-#     change_to = data['change_to']
-#     username = session['username']
-#     leadId = data['leadId']
-#     cur_status = data['cur_status']
-#     net_upvotes = data['net_upvotes']
-#     address = db.collection("references").document(leadId).get().to_dict()["address"]
-#     address = address.split("/")
-#     doc = db.collection("Inventory").document(address[1]).collection(address[2]).document(address[3]).collection("leads").document(leadId).get().to_dict()
-#     ndata = {'votes' : {username : change_to} , 'net_upvotes' : net_upvotes + change_to - cur_status , 'weight' : doc["weight"] + (change_to - cur_status)*(weight(time.time() - doc["time"]))}
-#     db.collection("Inventory").document(address[1]).collection(address[2]).document(address[3]).collection("leads").document(leadId).set(ndata , merge=True)
-#     return jsonify(success=True)
-
-# @app.route('/delete_lead_api', methods=['POST'])
-# @is_logged_in
-# def delete_lead():
-#     data = request.json
-#     leadId = data['leadId']
-#     username = session['username']
-#     address = db.collection("references").document(leadId).get().to_dict()["address"]
-#     iaddress = address.split("/")
-#     db.collection("Inventory").document(iaddress[1]).collection(iaddress[2]).document(iaddress[3]).collection("leads").document(leadId).delete()
-#     db.collection("users").document(username).update({'leads' : firestore.ArrayRemove([address])})
-#     db.collection("references").document(leadId).delete()
-#     return jsonify(success=True)
 
 @app.route('/username_exists', methods=['POST'])
 def check_if_username_exists():
@@ -234,103 +146,6 @@ def check_if_username_exists():
     else:
         return jsonify(success=False, err_code='0')
 
-# @app.route('/add_comment', methods=['POST'])
-# @is_logged_in
-# def add_comment():
-#     data = request.json
-#     leadId = data['leadId']
-#     username = session['username']
-#     comment = data['comment']
-#     address = db.collection("references").document(leadId).get().to_dict()["address"]
-#     iaddress = address.split("/")
-#     db.collection("Inventory").document(iaddress[1]).collection(iaddress[2]).document(iaddress[3]).collection("leads").document(leadId).set({
-#         "comments" : firestore.ArrayUnion([{
-#             "comment" : comment , 
-#             "poster" : username , 
-#             "time" : datetime.datetime.now()
-#         }])
-#     } , merge = True)
-    
-#     print("Hello")
-#     return jsonify(success=True)
-
-# @app.route('/get_states', methods=['POST'])
-# def get_states():
-#     """
-#     This nees the item and it finds all the subcollections
-#     """
-
-#     states = []
-#     collections = db.collection("Inventory").document(request.json["item"]).collections()
-
-#     for collection in collections:
-#         states.append(collection.id)
-
-#     return jsonify(success=True, states=states)
-
-
-# @app.route("/update_rating", methods=['POST'])
-# def update_rating():
-#     '''
-#     We need reviewer and reviewed in this
-#     Alsot he rating given by him
-#     '''
-#     data = request.json 
-#     ndata = db.collection("users").document(data["reviewed"]).get().to_dict()
-    
-#     if "rating" in ndata:
-#         ln = len(ndata["rating"])
-#         cur = ndata["net_rating"]
-#         new_rating = ((cur*ln) + data["rating"]) / (ln + 1)
-#         if data["reviewer"] in ndata["rating"]:
-#             new_rating = (cur*ln + data["rating"] - ndata["rating"][data["reviewer"]]) / ln
-#     else:
-#         new_rating = data["rating"]
-
-#     db.collection("users").document(data["reviewed"]).set({
-#         "rating" : { data["reviewer"] : data["rating"] },
-#         "net_rating" : new_rating
-#     }, merge=True)
-
-#     return jsonify(success=True)
-
-# @app.route("/get_votes", methods=['POST'])
-# def get_votes():
-#     data = request.json 
-#     print("Get votes" , data)
-#     leadId = data["leadId"]
-#     ndata = db.collection("Inventory").document().get().to_dict()
-#     address = db.collection("references").document(leadId).get().to_dict()["address"]
-#     address = address.split("/")
-#     doc = db.collection("Inventory").document(address[1]).collection(address[2]).document(address[3]).collection("leads").document(leadId).get().to_dict()
-#     lisp = doc["votes"]
-#     upvoters = []
-#     downvoters = []
-#     for voter in lisp:
-#         dc = db.collection("users").document(voter).get().to_dict()
-#         rating = None
-#         if "net_rating" in dc:
-#             rating = dc["net_rating"]
-#         if lisp[voter] == 1:
-#             upvoters.append([voter,rating])
-#         elif lisp[voter] == -1:
-#             downvoters.append([voter, rating])
-#     print(upvoters)
-#     print(downvoters)
-#     return jsonify(upvoters = upvoters , downvoters = downvoters , urls = doc["imageReviews"])
-
-# @app.route("/imageReviewUpload", methods=['POST'])
-# def handle_image_upload():
-#     data = request.json 
-#     print("Image review upload" , data)
-#     leadId = data["leadId"]
-#     url = data["url"]
-#     address = db.collection("references").document(leadId).get().to_dict()["address"]
-#     address = address.split("/")
-#     doc = db.collection("Inventory").document(address[1]).collection(address[2]).document(address[3]).collection("leads").document(leadId).set({
-#         "imageReviews" : firestore.ArrayUnion([url])} , merge = True)
-#     return jsonify(success = True)
-
 """
 Routes
 """
@@ -351,29 +166,6 @@ def home():
         return render_template(type + '/dashboard.html', username=username)
     else:
         return render_template('index.html', username=username)
-
-# @app.route('/add', methods=['GET'])
-# @is_logged_in
-# def add():
-#     id = request.args.get('id');
-#     dict_pass = {};
-#     if id != None:
-#         dict_pass["id"] = id
-#         dict_pass["contact"] = request.args.get('contact');
-#         dict_pass["address"] = request.args.get('address');
-#         dict_pass["city"] = request.args.get('city');
-#         dict_pass["name"] = request.args.get('name');
-#         dict_pass["item_name"] = request.args.get('item');
-#         dict_pass["state"] = request.args.get('state');
-#         dict_pass["quantity"] = request.args.get('qty');
-
-#         for x in dict_pass.keys():
-#             if dict_pass[x] is None:
-#                 print("missing value - ",x);
-
-#         return render_template("add.html", data=dict_pass, check = 1)
-#     else:
-#         return render_template("add.html", data=dict_pass, check = 0)
 
 
 @app.route('/patient/login')
@@ -397,6 +189,56 @@ def hospital_login():
 
     return render_template('hospital/login.html')
 
+@app.route('/hospital/<id>/meds')
+def get_all_meds(id):
+    allMedsData = [
+        {
+            "id": "some unique 1",
+            "item_name": "paracetemol",
+            "quantity": 10,
+            "price": "Rs 100"
+        },
+        {
+            "id": "some unique 2",
+            "item_name": "Dolo 650",
+            "quantity": 7,
+            "price": "Rs 50"
+        }
+    ]
+
+    return jsonify(success=True, allMedsData=allMedsData)
+
+
+@app.route('/hospital/<id>/doctors')
+def get_all_doctors(id):
+    allDoctorsData = [
+        {
+            "username": "doc_username1",
+            "doctor_name": "doc NAme",
+            "degree": "Desgree",
+            "medical_profession": "Helo",
+            "phone_no": "9811417932"
+        }
+    ]
+
+    return jsonify(success=True, allDoctorsData=allDoctorsData)
+
+@app.route('/hospital/<id>/beds')
+def get_all_beds(id):
+    allBedsData = [
+        {
+            "hospital_id": "value",
+            "room_no": "value",
+            "patient_id": "value"
+        },
+        {
+            "hospital_id": "value",
+            "room_no": "value",
+            "patient_id": "value"
+        }
+    ]
+
+    return jsonify(success=True, allBedsData=allBedsData)
 
 @app.route('/login', methods=['POST'])
 def login_register():
@@ -452,11 +294,9 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
-# @app.route('/vaccine' , methods=['GET' , 'POST'])
-# def vaccine():
-#     if request.method == "POST":
-#         return v.query(request.json["pincode"])
-#     return render_template("vaccine.html")
+
+
+
 
 """
 Test routes
