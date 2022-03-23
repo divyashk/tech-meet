@@ -32,6 +32,7 @@ patient_detail
 # db.collection('patient')
 
 for index, row in patient_detail.iterrows():
+    # print(row["username"])
     data = {
         "patient_name": row['patient_name'],
         "nhid": row['nhid'],
@@ -40,10 +41,10 @@ for index, row in patient_detail.iterrows():
         "patient_address": row['patient_address'],
         "phone_number": row['phone_number'],
         "username": row['username'],
-        "password": sha256_crypt.encrypt(row['password'])
+        "password": str(sha256_crypt.encrypt(row['password']))
     }
 
-    db.collection('patient').document(row['username']).set(data, merge=True)
+    db.collection('patient').document(str(row['username'])).set(data, merge=True)
     print("Added ", data)
 
 # %%
