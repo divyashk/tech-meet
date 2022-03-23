@@ -44,6 +44,25 @@ def register_user():
     # based on the value of role, call add_{patient , doctor , hospital}_to_db
     return jsonify(success=True)
 
+
+'''
+    Desc : Authenticate Login
+    @json 
+    {
+        email : "xyz@gmail.com"
+        passwd : "letmein"
+    }
+'''
+@app.route('/login-check', methods=['POST'])
+def register_user():
+    data = request.json
+    # use email to get user data from user's collection (password and role)
+    # hash the password and compare with password
+    # if success
+    return jsonify(success=True , role = 1)
+    # if failure
+    return jsonify(success=False)
+
 # Main
 if __name__ == '__main__':
     app.run(debug=True)
