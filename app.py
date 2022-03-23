@@ -442,6 +442,15 @@ Test routes
 # def testcomment():
 #     return render_template('testcomment.html')
 
+@app.route('/dashboard')
+def dashboard_route():
+    hospital_data = {
+        "hospital_name": "Hello",
+        "address": "My address"
+    }
+
+    return render_template('hospital_dashboard.html', hospital_data = hospital_data)
+
 """
 Main 
 """

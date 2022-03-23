@@ -1,0 +1,31 @@
+doctor_name,degree,medical_profession,year_of_xp,hospital,phone_no,username,password
+Dr. Amarpreet Singh Riar,MD- Physician,"General Practitioner, General Physician",9,"Aman Medical Clinic, Palam Colony, Delhi.",8142111638,dramarpreetmd,amarmd@123
+Dr. (Maj.)Sharad Shrivastava,MBBS,General Physician,29,"Gouri Clinic in Dwarka, New Delhi",8142111623,drsharadmbbs,sharadmbbs@123
+Dr. Anirban Biswas,"MBBS, MD - General Medicine, Fellowship in Non-Invasive Cardiology (FIC)","Diabetologist, Consultant Physician",16,"Gouri Clinic in Dwarka, New Delhi",8142111662,dranirbanmbbs,anirbanmbbs@123
+Dr. Aman Vij,"MBBS, DNB - General Medicine","Internal Medicine, Consultant Physician, General Physician",24,"Aman Medical Clinic, Palam Colony, Delhi.",8142111624,dramanvmbbs,amarmbbsdnb@123
+Dr. Mansi Arya,"BHMS, MD - Homeopathy, MSc - Psychotherapy And Counselling","Homoeopath, Counselling Psychologist",16," S.D. Homoeopathy in Dwarka, Delhi",9031119028,drmkaryabhms,mkaryabhms@123
+Dr. Sunil Kumar Dwivedi,"MD - Homeopathy, BHMS",Homoeopath,17," S.D. Homoeopathy in Dwarka, Delhi",011 4119 3903,drskdwivedimd,skdwivedimd@123
+Dr. Chhavi Bansal,"BHMS, MS - Psychology",Homoeopath,11,"Homeosure - Home Of Homeopathy and Wellness in Pitampura, Delhi",011 4084 4825,drchhavibhms,chhavibhms@123
+Dr. Sneh Khera,BHMS,Homoeopath,37,"Homeosure - Home Of Homeopathy and Wellness in Pitampura, Delhi",7590247803,drsnehbhms,snehbhms@123
+Dr. Inderjeet Singh,"MD - Homeopathy, BHMS",Homoeopath,4," S.D. Homoeopathy in Dwarka, Delhi",23966021,driksinghmd,iksinghmd@123
+Dr. Suman Mohan,"BHMS, MSc. - Food Service Management & Dietetics, Certificate in Nutrition and Child Care",Homoeopath,21,"Homeosure - Home Of Homeopathy and Wellness in Pitampura, Delhi",9910762407,drsumanbhms,sumanbhms@123
+Dr. Manish Munjal,"MBBS, MS - ENT",ENT/ Otorhinolaryngologist,21,"St. Stephen's Hospital, Delhi",011 4257 4667,drmanishmbbs,manishmbbs@123
+Dr. Ajay Jain,"MBBS, MS - ENT, DNB - Otorhinolaryngology","ENT/ Otorhinolaryngologist, Head and Neck Surgeon",24,"St. Stephen's Hospital, Delhi",12 4057 4664,drajaymbbs,ajaymbbs@123
+Dr. Anshul Gupta,"MBBS, DNB - ENT",ENT/ Otorhinolaryngologist,17,"St. Stephen's Hospital, Delhi",011-40554555,dranshulmbbs,anshulmbbs@123
+Dr. B B Khatri,"MBBS, MS - ENT",ENT/ Otorhinolaryngologist,34,"Personal Touch Mediclinic in Bhogal, Delhi. ",011 2673 0024,drbbkmbbs,bbkmbbs@123
+Dr. Rajeev Adhana,"BHMS, MS - Psychology",Homoeopath,3,"Homeosure - Home Of Homeopathy and Wellness in Pitampura, Delhi",211 4116 8757,drrajeevbhms,rajeevbhms@123
+Dr. Vidit Tripathi,"MBBS, MS - ENT, DNB - Otorhinolaryngology",ENT/ Otorhinolaryngologist,28,"Personal Touch Mediclinic in Bhogal, Delhi. ",011 42042000,drvidittmbbs,vidittmbbs@123
+Dr. Arun Wadhawan,"MBBS, MS - ENT, DNB - Otorhinolaryngology",ENT/ Otorhinolaryngologist,24,"Personal Touch Mediclinic in Bhogal, Delhi. ",9223792642,drarunwmbbs,arunwmbbs@123
+Dr. Neha Sood,"MBBS, DNB - Otorhinolaryngology",ENT/ Otorhinolaryngologist,21,"Nirmal ENT Clinic in CR Park, Delhi. ",9223447636,drnehambbs,nehambbs@123
+Dr. Vineet Narula,"MBBS, MS - ENT",ENT/ Otorhinolaryngologist,14,"Nirmal ENT Clinic in CR Park, Delhi. ",7834908964,drvineetmbbs,vineetmbbs@123
+Dr. Yogesh Jain,"MBBS, MS - ENT","ENT/ Otorhinolaryngologist, Otologist/ Neurotologist",30,"Nirmal ENT Clinic in CR Park, Delhi. ",7834908734,dryogeshmbbs,amarmbbsms@123
+Dr. Rakesh Singh,"MBBS, MS - ENT",ENT/ Otorhinolaryngologist,16,"Max Hospital,Saket , Delhi",9845634147,drrhsinghmbbs,rhsinghmbbs@123
+Dr. Sudha Asokan,"BAMS, MD - Ayurveda Medicine",Ayurveda,43,Safdarjung Hospital,7845731147,drs asokanbams,sasokanbams@123
+Dr. Mahesh Shah,BSAM,"Sexologist, Ayurveda, Alternative Medicine",53,"Ayurvedic Sexologist Hakim Hari Kishan Lal Dawakhana in Patel Nagar East, Delhi",8932791558,drmaheshbsam,amarbsam@123
+Dr. S K Singh,"BAMS, MS - Ayurvedic General Surgery",Ayurveda,36,"Moolchand Hospital, Delhi",8732790038,drsisinghbams,sisinghbams@123
+Dr. Sudhir Bhola,"MBBS, MS - ENT, DNB - Otorhinolaryngology",ENT/ Otorhinolaryngologist,31,"Personal Touch Mediclinic in Bhogal, Delhi. ",8923097581,drsudhirbmbbs,sudhirbmbbs@123
+Dr. Jyoti Arora Monga,BAMS,"Ayurveda, Alternative Medicine, Sexologist",22,"Ayurvedic Sexologist Hakim Hari Kishan Lal Dawakhana Shafakhana Clinic in Patel Nagar East, Delhi.",8333098781,drjyotibams,amarbams@123
+Dr. Vijay Abbot,G.A.M.S,"Sexologist, Ayurveda, Alternative Medicine",48,"Ayurvedic Sexologist Hakim Hari Kishan Lal Dawakhana Shafakhana Clinic in Patel Nagar East, Delhi.",9045178970,drvijayg,amarg@123
+Dr. Rakesh Gupta,BAMS,Ayurveda,20,Safdarjung Hospital,9065170900,drrguptabams,rguptabams@123
+Dr. Sugeeta Mutreja,"BAMS, DNHE","Ayurveda, Dietitian/Nutritionist",22,Safdarjung Hospital,9040562789,drsmutrejabams,smutrejabams@123
+Dr. Ruchi Gupta,BAMS,Ayurveda,21,"Moolchand Hospital, Delhi",9067553890,drriguptabams,riguptabams@123
