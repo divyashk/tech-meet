@@ -65,12 +65,12 @@
 <div id="main">
     <form id="login-container" class="card darken-1">
         <div class="card-content">
-            <span class="card-title">Login/Register to continue</span>
+            <span class="card-title">Login/Register As a Hospital</span>
             <p> Either enter your registered username or enter a new one and registration will follow. <p>
 
         <div id="un-input" class="input-field col s6">
                 <i class="material-icons prefix">account_circle</i>
-                <input placeholder="Enter your UserName" id="un" type="text" class="validate">
+                <input placeholder="Enter your hospital username" id="un" type="text" class="validate">
                 <label for="un">UserName</label>
             </div>
             <div id="loading-anim" class="progress">
@@ -186,7 +186,8 @@
 
         // Now making a post request
         const data = {
-            username: un
+            username: un,
+            type: "hospital"
         }
 
         var payload = {

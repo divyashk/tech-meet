@@ -212,8 +212,11 @@ def check_if_username_exists():
     # also pass type in the parameters now
 
     req_data = request.json
+
+    print("Check if username exists in ", req_data["type"])
+
     if is_user_id_valid(req_data["username"]):
-        userid_ref = db.collection(req_data['type']).document(
+        userid_ref = db.collection(req_data["type"]).document(
             req_data['username']).get()
 
         if userid_ref.exists:
