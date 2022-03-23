@@ -40,7 +40,8 @@ def is_logged_in(f):
 
 def is_user_id_valid(uid):
     # Return True or False depending on if the username is valid or not
-    # Does NOT check if the username already exists or not
+    # Does NOT check if the username already exists or 
+    # Extra layer of security kind of
 
     regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
     if (regex.search(uid) != None):
@@ -208,18 +209,19 @@ def if_logged_in():
 def check_if_username_exists():
     # needs username and check if the username exists or not
     # returns true and false depending on if it exists
+    # also pass type in the parameters now
+
     req_data = request.json
     if is_user_id_valid(req_data["username"]):
-        # Make the request now
-        userid_ref = db.collection(u'users').document(
+        userid_ref = db.collection(req_data['type']).document(
             req_data['username']).get()
 
         if userid_ref.exists:
             print("username exists")
-            # if "image" in userid_ref.to_dict():
-            #     return jsonify(success=True , image=userid_ref.to_dict()["image"])
-            # else:
-            #     return jsonify(success=True, image="")
+            if "image" in userid_ref.to_dict():
+                return jsonify(success=True , image=userid_ref.to_dict()["image"])
+            else:
+                return jsonify(success=True, image="")
         else:
             print("username doesn't exists")
             return jsonify(success=False, err_code='1')
@@ -365,7 +367,20 @@ def give_favicon():
 #         return render_template("add.html", data=dict_pass, check = 0)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/patient/login')
+def patient_login():
+    return render_template('patient/login.html')
+
+@app.route('/doctor/login')
+def doctor_login():
+    return render_template('doctor/login.html')
+
+@app.route('/hospital/login')
+def hospital_login():
+    return render_template('hospital/login.html')
+
+
+@app.route('/login', methods=['POST'])
 def login_register():
     '''
     The main login page which functions using the apis and all
@@ -373,24 +388,21 @@ def login_register():
     if "logged_in" in session and session["logged_in"]:
         return redirect(url_for("profile"))
 
-    if request.method == 'GET':
-        return render_template('login.html')
+    data = request.json
+    pass_hash = db.collection("users").document(
+        data["username"]).get().to_dict()['password']
+    if sha256_crypt.verify(data["password"], pass_hash):
+
+        if data["username"] == "root":
+            # This is a superuser!!
+            session['is_super_user'] = True
+            session['super_user_secret'] = "admin@ppd"
+
+        session['logged_in'] = True
+        session['username'] = data['username']
+        return jsonify(success=True)
     else:
-        data = request.json
-        pass_hash = db.collection("users").document(
-            data["username"]).get().to_dict()['password']
-        if sha256_crypt.verify(data["password"], pass_hash):
-
-            if data["username"] == "root":
-                # This is a superuser!!
-                session['is_super_user'] = True
-                session['super_user_secret'] = "admin@ppd"
-
-            session['logged_in'] = True
-            session['username'] = data['username']
-            return jsonify(success=True)
-        else:
-            return jsonify(success=False)
+        return jsonify(success=False)
 
 @app.route('/profile')
 @is_logged_in
