@@ -167,6 +167,49 @@
         </div>
       </div>
 
+      <div class="col s12 m6" id="lead` + val.leadId + `">
+        <div class="card horizontal">                      
+            <div class="card-stacked">
+                <div class="card-content">
+                    <div class="card-head"></div>
+                    <a class="profile-link" href="/profile/` + val.username + `">` + val.name + `</a>
+                    <div class="address" style="margin-top: 12px">
+                        <a target="_none" rel="noopener" href="https://www.google.com/maps/search/` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + `">` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + ` <span class="material-icons my-loc-icon">location_on</span> ` + `</a>
+                    </div>
+                </div>
+                <div class="card-action">
+                    <div>
+                    <i class="material-icons prefix" style="vertical-align: middle;">phone</i>
+                    <a href= tel:` + val.contact + `>` + val.contact + `</a>
+                    </div>
+                    <div style="margin-left: auto; cursor: pointer;" onclick="openModal(` + index + `, event)">
+                        ` + (Boolean(val.comments) ? (val.comments.length) : 0) + `
+                        <span class="material-icons" style="vertical-align: middle">comment</span>
+                        <span class="material-icons" style="vertical-align: middle; margin-bottom:7px;">add_a_photo</span>
+                    </div>
+                </div>
+            </div>
+            <div class="right-row">
+                <div class="upvote ` + upVoteClass + `" onclick="handleVote(` + index + `, 1) ">
+                    <span class="material-icons">
+                        expand_less
+                    </span>
+                </div>
+
+                <div class="up-vote-count">
+                    ` + val.net_upvotes + `
+                 </div>
+
+                <div class="downvote ` + downVoteClass + `" onclick="handleVote(` + index + `, -1)">
+                    <span class="material-icons">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
       <div id="About" class="tabcontent">
         <h3>Leads</h3>
         <div id="profile-leads"></div>
@@ -188,16 +231,16 @@
 
   const allMedsData = [
     {
-      id: "some unique 1",
-      item_name: "paracetemol",
-      quantity: 10,
-      price: "Rs 100"
+      "id": "some unique 1",
+      "item_name": "paracetemol",
+      "quantity": 10,
+      "price": "Rs 100"
     },
     {
-      id: "some unique 2",
-      item_name: "Dolo 650",
-      quantity: 7,
-      price: "Rs 50"
+      "id": "some unique 2",
+      "item_name": "Dolo 650",
+      "quantity": 7,
+      "price": "Rs 50"
     },
   ];
 
