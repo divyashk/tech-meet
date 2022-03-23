@@ -4,7 +4,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import os
-
+import requests
 # Initialization
 cred = credentials.Certificate('../../creds.json')
 firebase_admin.initialize_app(cred)
@@ -120,13 +120,19 @@ def close_appointment():
         # if next_appointment is not null, then create a new appointment as a followup for this
         next_appointment_date=current_appointment_data['next_appointment']
         if(next_appointment_date is not NULL):
-
-            new_appointment=db.collection('appointment').document(current_appointment_data['doctorid']+"_"+current_appointment_data['patientid']+"_"+next_appointment_date)
+            new_appointment_id=current_appointment_data['doctorid']+"_"+current_appointment_data['patientid']+"_"+next_appointment_date
             
+            # db.collection('appointment').document(new_appointment_id)
             # modify /book_appointment route below
             # new_appointment.set({...})
             #??????????????????????
-        
+            
+            dictToSend = {"appointment_id":new_appointment_id,"doctorid":current_appointment_data["doctorid"],"patientid":current_appointment_data["patientid"],"datetime":NULL,"description":current_appointment_data["description"]}
+            res = requests.post('/book_appointment', json=dictToSend) # NOT TESTED
+            print('response from server:',res.text)
+            dictFromServer = res.json()
+            print(dictFromServer)
+
         return jsonify(success=True)
     except:
         return jsonify(success=False)
