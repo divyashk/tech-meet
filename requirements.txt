@@ -3,4 +3,4 @@ firebase-admin
 passlib
 gunicorn
 pandas
-
+pyyaml
