@@ -6,7 +6,7 @@ $(document).ready(function(){
             'Content-Type': 'application/json',
         },
     }
-    
+
     fetch('/if_logged_in', payload)
     .then(res => res.json())
     .then(res => {
@@ -33,7 +33,7 @@ $(document).ready(function(){
             const li = $("#nav_dropdown");
             li.innerHTML = "";
             const a = document.createElement('a');
-            a.href = "/login";
+            a.href = "/";
             a.innerText = "Log in";
             
             li.append(a);
