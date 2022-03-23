@@ -74,7 +74,7 @@ def register_user():
     @json needed
     - password
     - username
-    - type
+    - role
     - Rest any other details like name, etc
     '''
     data = request.json
