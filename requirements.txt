@@ -4,3 +4,4 @@ passlib
 gunicorn
 pandas
 pyyaml
+python-dotenv
