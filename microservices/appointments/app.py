@@ -21,8 +21,8 @@ app.secret_key = os.getenv('SECRET_KEY')
     Desc : Book a new appointment
     @json 
     {
-        patientid : "random_patient_id"
-        doctorid : "random_doctor_id"
+        patient_id : "random_patient_id"
+        doctor_id : "random_doctor_id"
         datetime : "some datetime format" (Store as it is in db as of now)
         description : "details about disease"
     }
@@ -35,17 +35,17 @@ def book_appointment():
     try:
         # store this data (also add status = open) in appointments collection and get appointment id
         data['status'] = "open"
-        data['appointment_id'] = data['patientid'] + "_"+data['doctorid']+"_"+data['datetime']
+        data['appointment_id'] = data['patient_id'] + "_"+data['doctor_id']+"_"+data['datetime']
         db.collection("appointments").document(
             data['appointment_id']).set(data, merge=True)
 
         # open patients collection, add this appointment id to appointments array []
-        patient_ref = db.collection("patient").document(data['patientid'])
+        patient_ref = db.collection("patient").document(data['patient_id'])
         patient_ref.update(
             {u'appointments': firestore.ArrayUnion([data['appointment_id']])})
 
         # open doctors collection, add this appointment id to appointments array []
-        doctor_ref = db.collection("doctor").document(data['doctorid'])
+        doctor_ref = db.collection("doctor").document(data['doctor_id'])
         doctor_ref.update(
             {u'appointments': firestore.ArrayUnion([data['appointment_id']])})
 
@@ -120,14 +120,14 @@ def close_appointment():
         # if next_appointment is not null, then create a new appointment as a followup for this
         next_appointment_date=current_appointment_data['next_appointment']
         if(next_appointment_date is not NULL):
-            new_appointment_id=current_appointment_data['doctorid']+"_"+current_appointment_data['patientid']+"_"+next_appointment_date
+            new_appointment_id=current_appointment_data['doctor_id']+"_"+current_appointment_data['patient_id']+"_"+next_appointment_date
             
             # db.collection('appointment').document(new_appointment_id)
             # modify /book_appointment route below
             # new_appointment.set({...})
             #??????????????????????
             
-            dictToSend = {"appointment_id":new_appointment_id,"doctorid":current_appointment_data["doctorid"],"patientid":current_appointment_data["patientid"],"datetime":NULL,"description":current_appointment_data["description"]}
+            dictToSend = {"appointment_id":new_appointment_id,"doctor_id":current_appointment_data["doctor_id"],"patient_id":current_appointment_data["patient_id"],"datetime":NULL,"description":current_appointment_data["description"]}
             res = requests.post('/book_appointment', json=dictToSend) # NOT TESTED
             print('response from server:',res.text)
             dictFromServer = res.json()
