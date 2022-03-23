@@ -1,4 +1,5 @@
 from flask import Flask, json, render_template, jsonify, request, session, flash, redirect, url_for, send_file
+from pymysql import NULL
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -22,7 +23,7 @@ def is_user_id_valid(uid):
         return False
     return True
 
-@app.route('/test', methods=['GET'])
+# @app.route('/test', methods=['GET'])
 # Functions
 def add_patient_to_db(user_id="" , patient_data=""):
     # Add patient_data to patient's collection and also store "user_id"
@@ -36,13 +37,22 @@ def add_patient_to_db(user_id="" , patient_data=""):
     # db.collection("patient").document("_testing").set(data, merge=True)
 
 
-def add_doctor_to_db(user_id , doctor_data):
+def add_doctor_to_db(user_id ="", doctor_data=""):
     # Add doctor_data to doctor's collection and also store "user_id"
-    return True
+    if(user_id is not '' and doctor_data is not ''):
+        db.collection("doctor").document(user_id).set(doctor_data, merge=True)
+        return True
+    else:
+        return False
 
-def add_hospital_to_db(user_id , patient_data):
+def add_hospital_to_db(user_id ="", hospital_data=""):
     # Add hospital_data to hospital's collection and also store "user_id"
-    return True
+    if(user_id is not '' and hospital_data is not ''):
+        db.collection("hospital").document(user_id).set(hospital_data, merge=True)
+        return True
+    else:
+        return False
+
 
 # APIs
 
@@ -52,7 +62,7 @@ def add_hospital_to_db(user_id , patient_data):
     {
         email : "xyz@gmail.com"
         passwd : "letmein"  
-        role(type) : (0 or 1 or 2) [0 --> Patient , 1 --> Doctor , 2 --> Hospital]
+        role : (0 or 1 or 2) [0 --> Patient , 1 --> Doctor , 2 --> Hospital]
         userdata : {object based on role}  
     }
 '''
@@ -68,10 +78,7 @@ def register_user():
     - Rest any other details like name, etc
     '''
     data = request.json
-    # image = data['image']
-    # print(image)
-    compulsary_items = ["username", "password", "type"]
-    # other fields are ["age","gender","nhid","patient_address","patient_name","phone_number"]
+    compulsary_items = ["username", "password", "role"] # username and email are same
 
     for item in compulsary_items:
         if item not in data:
@@ -82,11 +89,23 @@ def register_user():
         data['password'] = sha256_crypt.encrypt(str(data['password']))
 
         # Update the user in the database
-        db.collection("users").document(data['username']).set(data, merge=True)
+        db.collection("users").document(data['username']).set({"username":data["username"], "password":data["password"], "role":data["role"]}, merge=True)
 
-        session['logged_in'] = True
-        session['username'] = data['username']
-        session['type'] = data['type']
+        # session['logged_in'] = True
+        # session['username'] = data['username']
+        # session['type'] = data['type']
+        # session['role'] = data['role']
+
+        if(data['role']==0):
+            add_patient_to_db(data['username'],data['userdata'])
+
+        if(data['role']==1):
+            add_doctor_to_db(data['username'],data['userdata'])
+
+        if(data['role']==2):
+            add_hospital_to_db(data['username'],data['userdata'])
+
+
         return jsonify(success=True)
     else:
         return jsonify(success=False, err_code='0')
@@ -126,18 +145,18 @@ def user_login():
     if sha256_crypt.verify(data["password"], pass_hash):
         print("Password match successfully, login the user")
 
-        if data["username"] == "root":
-            # This is a superuser!!
-            session['is_super_user'] = True
-            session['super_user_secret'] = "admin@ppd"
+        # if data["username"] == "root":
+        #     # This is a superuser!!
+        #     session['is_super_user'] = True
+        #     session['super_user_secret'] = "admin@ppd"
 
-        session['logged_in'] = True
-        session['username'] = data['username']
-        session['type'] = data['type']
-        return jsonify(success=True, role = 1)
+        # session['logged_in'] = True
+        # session['username'] = data['username']
+        # session['type'] = data['type']
+        return jsonify(success=True, role = fire_req_data['role'])
     else:
         print("Password does not match")
-        return jsonify(success=False, err="Password does not match")
+        return jsonify(success=False, err="Password does not match",role=NULL)
 
 # Main
 if __name__ == '__main__':
