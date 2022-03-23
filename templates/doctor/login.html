@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block css %}
+
 <style>
     #main {
         display: flex;
@@ -186,7 +187,8 @@
 
         // Now making a post request
         const data = {
-            username: un
+            username: un,
+            type: "doctor"
         }
 
         var payload = {

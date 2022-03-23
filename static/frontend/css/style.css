@@ -16,10 +16,11 @@ body {
     background-color: var(--back-shade);
 }
 
-#just-img {
+#just-img 
+{
     position: absolute;
-    height: 700px;
-    width: 1200px;
+    height: 75vh;
+    width: 85vw;
     background-image: url("/static/03.jpg");
     background-size:     cover;                      /* <------ */
     background-repeat:   no-repeat;
@@ -60,7 +61,7 @@ body {
 
 #login-container, #password-container {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    max-width: 450px;
+    max-width: 90vw;
     background-color: var(--box-color);
     position: relative;
 }
