@@ -54,7 +54,7 @@ def register_user():
     }
 '''
 @app.route('/login-check', methods=['POST'])
-def register_user():
+def user_login():
     data = request.json
     # use email to get user data from user's collection (password and role)
     # hash the password and compare with password
