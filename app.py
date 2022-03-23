@@ -342,10 +342,10 @@ def give_favicon():
 @app.route('/find')
 def find():
     username = ""
-
     if ("username" in session):
         username = session["username"]
-        render_template('find.html', username=username)
+        type = "hospital"
+        return render_template(type + '/dashboard.html', username=username)
     else:
         return render_template('index.html', username=username)
 
@@ -375,14 +375,23 @@ def find():
 
 @app.route('/patient/login')
 def patient_login():
+    if "logged_in" in session and session["logged_in"]:
+        return redirect(url_for("profile"))
+
     return render_template('patient/login.html')
 
 @app.route('/doctor/login')
 def doctor_login():
+    if "logged_in" in session and session["logged_in"]:
+        return redirect(url_for("profile"))
+
     return render_template('doctor/login.html')
 
 @app.route('/hospital/login')
 def hospital_login():
+    if "logged_in" in session and session["logged_in"]:
+        return redirect(url_for("profile"))
+
     return render_template('hospital/login.html')
 
 
@@ -395,11 +404,12 @@ def login_register():
         return redirect(url_for("profile"))
 
     data = request.json
-    fire_req_data = db.collection("users").document(
+    fire_req_data = db.collection(data['type']).document(
         data["username"]).get().to_dict()
     pass_hash = fire_req_data['password']
 
     if sha256_crypt.verify(data["password"], pass_hash):
+        print("Password match successfully, login the user")
 
         if data["username"] == "root":
             # This is a superuser!!
@@ -411,13 +421,15 @@ def login_register():
         session['type'] = data['type']
         return jsonify(success=True)
     else:
-        return jsonify(success=False)
+        print("Password does not match")
+        return jsonify(success=False, err="Password does not match")
 
-@app.route('/profile')
+@app.route('/doctor/me')
 @is_logged_in
 def profile():
     if session['username']:
         username= session['username']
+
     return render_template("profile.html", username = username, isMe="yes", loginuser=username)
 
 @app.route('/profile/<id>')
@@ -435,7 +447,7 @@ def profile_others(id):
 def logout():
     session["logged_in"] = False
     session.clear()
-    return redirect(url_for('find'))
+    return redirect(url_for('/'))
 
 # @app.route('/vaccine' , methods=['GET' , 'POST'])
 # def vaccine():

@@ -65,7 +65,7 @@
 <div id="main">
     <form id="login-container" class="card darken-1">
         <div class="card-content">
-            <span class="card-title">Login/Register to continue</span>
+            <span class="card-title">Login/Register as a Patient</span>
             <p> Either enter your registered username or enter a new one and registration will follow. <p>
 
         <div id="un-input" class="input-field col s6">
@@ -264,7 +264,8 @@
         // Now making a post request
         const data = {
             username: window.userNameUsed,
-            password: pass
+            password: pass,
+            type: "patient"
         }
 
         var payload = {

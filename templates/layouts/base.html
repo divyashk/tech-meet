@@ -22,6 +22,7 @@
 
 <body>
 
+    {% block nav %}
     <ul id="dropdown1" class="dropdown-content">
         <li><a href="/profile">Profile</a></li>
         <li class="divider"></li>
@@ -53,6 +54,8 @@
     </nav>
         
     <div id="just-img"></div>
+
+    {% endblock %}
             
     {% block body %}
     {% endblock %}
