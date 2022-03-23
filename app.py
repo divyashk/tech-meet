@@ -339,8 +339,7 @@ def give_favicon():
     return send_file('static/download.png')
 
 @app.route('/')
-@app.route('/find')
-def find():
+def home():
     username = ""
     if ("username" in session):
         username = session["username"]
@@ -447,7 +446,7 @@ def profile_others(id):
 def logout():
     session["logged_in"] = False
     session.clear()
-    return redirect(url_for('/'))
+    return redirect(url_for('home'))
 
 # @app.route('/vaccine' , methods=['GET' , 'POST'])
 # def vaccine():

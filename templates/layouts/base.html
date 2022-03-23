@@ -15,6 +15,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/static/frontend/css/style.css">
+
+    <style>
+        .nav-my-info {
+            display: flex;
+        }
+
+        .nav-my-img {
+            padding: 8px;
+        }
+        .sidenav li>a {
+            display: flex;
+        }
+    </style>
+
     {% block css %}
     {% endblock %}
 
@@ -30,12 +44,35 @@
     </ul>
 
     <ul class="sidenav" id="mobile-demo" >
-        <li><a href="/find">Find</a></li>
-        <li><a href="/add">Add</a></li>
-        <li><a href="/vaccine">Vaccine</a></li>
-        <li><a href="/profile">Profile</a></li>
+        {% if username %}
+        <li>
+            <div class="nav-my-info">
+                <div class="nav-my-img">
+                    <i class="material-icons" style="font-size: 50px; color: #26a69a;">account_circle</i>
+                </div>
+                <div class="nav-my-name">
+                    Priyam Seth
+                </div>
+            </div>
+        </li>
+        {% else %}
+        <li>
+            <a class="nav-my-info" href="/">
+                <div class="nav-my-img">
+                    <i class="material-icons" style="font-size: 50px; color: #26a69a;">account_circle</i>
+                </div>
+                <div class="nav-my-name">
+                    Login
+                </div>
+            </a>
+        </li>
+        {% endif %}
+
         <li class="divider"></li>
+
+        {% if username %}
         <li><a id="signout-btn-nav" href="/logout">Signout</a></li>
+        {% endif %}
     </ul>
 
 
