@@ -59,10 +59,15 @@ def update_item_from_inv():
         dispensary: "name"
     }
 '''
-@app.route('/fetch', methods=['GET'])
+@app.route('/fetch/:item_name', methods=['GET'])
 def fetch_item_from_inv(item_name):
     data = request.json
     # Search for an item in inventory and return
+    return True
+
+# TODO
+@app.route('/hospital/:hosp_id/getall', methods=['POST'])
+def get_all_meds(hosp_id):
     return True
 
 # Main

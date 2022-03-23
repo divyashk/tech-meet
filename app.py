@@ -340,6 +340,10 @@ def give_favicon():
 
 @app.route('/')
 def home():
+
+    type = "hospital"
+    return render_template(type + '/dashboard.html', username="priyam")
+
     username = ""
     if ("username" in session):
         username = session["username"]

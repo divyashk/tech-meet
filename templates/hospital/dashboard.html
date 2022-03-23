@@ -1,5 +1,7 @@
 {% extends 'layouts/base.html' %}
 
+<!-- Profile.html for reference -->
+
 {% block css %}
 
 <style>
@@ -138,6 +140,7 @@
       <ul>
         <li><button class="tablink" onclick="openPage('Home', this)" id="defaultOpen">Profile</button></li>
         <li><button class="tablink" id="leads-tab" onclick="openPage('About', this)"> Leads Added </button></li>
+        <li><button class="tablink" id="leads-tab" onclick="openPage('About', this)"> Leads Added </button></li>
       </ul>
     </div>
 
@@ -183,9 +186,62 @@
 
 <script>
 
+  const allMedsData = [
+    {
+      id: "some unique 1",
+      item_name: "paracetemol",
+      quantity: 10,
+      price: "Rs 100"
+    },
+    {
+      id: "some unique 2",
+      item_name: "Dolo 650",
+      quantity: 7,
+      price: "Rs 50"
+    },
+  ];
+
+  const allDoctorsData = [
+    {
+      username: "doc_username1",
+      doctor_name: "doc NAme",
+      degree: "Desgree",
+      medical_profession: "Helo",
+      phone_no: "9811417932"
+    },
+    {
+      username: "doc_username2",
+      doctor_name: "doc NAme",
+      degree: "Desgree",
+      medical_profession: "Helo",
+      phone_no: "9811417932"
+    },
+    {
+      username: "doc_username3",
+      doctor_name: "doc NAme",
+      degree: "Desgree",
+      medical_profession: "Helo",
+      phone_no: "9811417932"
+    }
+  ];
+
+  const bedsAllData = [
+    {
+      hospital_id: "value",
+      room_no: "value",
+      patient_id: "value"
+    },
+    {
+      hospital_id: "value",
+      room_no: "value",
+      patient_id: "value"
+    }
+  ]
+
+
   if (location.hash == "#About") {
     document.getElementById("leads-tab").click();
-  } else {
+  } else if (location.hash == "#") {
     // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
   }
@@ -223,233 +279,7 @@
 
   var leadsData = [];
 
-  handleUpdate = (index) => {
-    // Find the index from leadsdata
-    const leadId = leadsData[index].leadId;
-    const item = leadsData[index].item;
-    const state = leadsData[index].state;
-    const city = leadsData[index].city;
-    const qty = leadsData[index].quantity;
-    const address = leadsData[index].address;
-    const contact = leadsData[index].contact;
-    const name = leadsData[index].name;
-    location.href = "/add?id=" + leadId + "&item=" + item + "&state=" + state + "&city=" + city + "&qty=" + qty + "&address=" + address + "&contact=" + contact + "&name=" + name;
-  }
 
-  handleRemove = (index) => {
-    // Find the index from leadsdata
-    const leadId = leadsData[index].leadId;
-
-    // const referenceId = "Inventory/" + item + "/" + state + "/" + city + "/" + leadId;
-    // console.log("delete item", referenceId);
-
-    data = {
-      leadId: leadId,
-    }
-    var payload = {
-      method: 'POST', // or 'PUT'
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    }
-    
-    fetch('/delete_lead_api', payload)
-      .then(res => res.json())
-      .then(res => {
-        console.log('Get leads success', res);
-        if (res['success']) {
-          console.log("successful request");
-          location.reload();
-        }
-      })
-      .catch(err => {
-        console.log("Error in get_leads_api");
-      });
-    console.log("Submitted!");
-  }
-
-  updatePosts = (val, index) => {
-    leadsData.push(val);
-    let toAdd = "";
-
-    var upVoteClass = "";
-    var downVoteClass = "";
-
-    if (username) {
-      console.log("username found", username);
-
-      var myVote = val.votes[username];
-      if (myVote && myVote == 1) {
-        upVoteClass = "color-green";
-        leadsData[index].cur_status = 1;
-      } else if (myVote && myVote == -1) {
-        leadsData[index].cur_status = -1;
-        downVoteClass = "color-red";
-      } else {
-        leadsData[index].cur_status = 0;
-      }
-    }
-
-    var rightRow = "";
-
-    if (isMe == "yes") {
-      rightRow = `<div class="right-row">
-      <div class="edit-item" onclick="handleUpdate(` + index + `, 1)">
-          <span class="material-icons color-blue">
-              edit
-          </span>
-      </div>
-      <div class="up-vote-count">` + val.net_upvotes + `</div>
-      <div class="remove-item" onclick="handleRemove(` + index + `, -1)">
-          <span class="material-icons color-red">
-              delete
-          </span>
-      </div>
-    </div>`;
-    }
-
-    toAdd += `
-      <div class="col s12 m6">
-          <div class="card horizontal">                      
-              <div class="card-stacked">
-                <div class="card-content">
-                  <div class="card-head"> ` + val.item + " x " + val.quantity + ` </div>
-                  <p>` + val.name + `</p>
-                  <div class="address" style="margin-top: 12px">
-                      <a target="_none" rel="noopener" href="https://www.google.com/maps/search/` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + `">` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + ` <span class="material-icons my-loc-icon">location_on</span> ` + `</a>
-                  </div>
-              </div>
-              <div class="card-action">
-                  <i class="material-icons prefix" style="vertical-align: middle;">phone</i>
-                  <a href= tel:` + val.contact + `>` + val.contact + `</a>
-              </div>
-              </div>
-              ` + rightRow + `
-          </div>
-      </div>
-      `;
-
-    $("#profile-leads").append(toAdd);
-
-  }
-
-
-  getRatingString = (start = 0, end = 4) => {
-    let ratingString = "";
-
-    for (let i = 0; i < start; i++) {
-      ratingString += `
-        <span class="material-icons">
-          star
-        </span>`
-    }
-
-    for (let i = start; i <= end; i++) {
-      ratingString += `
-        <span class="material-icons">
-          star_border
-        </span>`
-    }
-
-    return ratingString;
-  }
-
-  db.collection("users").doc(username).get()
-    .then(doc => {
-      console.log("Doc", doc.data());
-
-      const data = doc.data();
-
-      $("#show-name-here").html(data.name);
-      $("#show-phone-here").html(`<i class="material-icons prefix" style="vertical-align: middle;">phone</i> <a href= tel:` + data.phone + `>` + data.phone + `</a>`);
-      $("#pp").prop("src" , data.image);
-      // Ratings
-      if (data.net_rating) {
-        $(".rating").html(getRatingString(data.net_rating));
-      } else {
-        $(".rating").html(getRatingString());
-      }
-
-      if (data.rating && loginuser && data.rating[loginuser]) {
-        $(".rating-input").html(getRatingString(data.rating[loginuser]));
-      } else {
-        $(".rating-input").html(getRatingString());
-      }
-
-      // Now loop in rating input
-      const stars = document.getElementsByClassName("rating-input")[0].getElementsByTagName("span");
-
-      console.log("stars", stars);
-      for (let i = 0; i < stars.length; i++) {
-        stars[i].onclick = function () {
-          console.log("give rating", i + 1);
-
-          // Sending api request to backend to update rating
-
-          pdata = {
-            rating: (i+1),
-            reviewer: loginuser,
-            reviewed: username
-          }
-          var payload = {
-            method: 'POST', // or 'PUT'
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(pdata),
-          }
-
-          fetch('/update_rating', payload)
-            .then(res => res.json())
-            .then(res => {
-              console.log('Get leads success', res);
-              if (res['success']) {
-                console.log("successful request");
-                location.reload();
-              }
-            })
-            .catch(err => {
-              console.log("Error in get_leads_api");
-            });
-          console.log("Submitted!");
-
-
-        }
-      }
-
-
-      // hide the rating by me for not logined
-      if (!loginuser) {
-        $("#rat-inp-con").css("display", "none");
-      }
-
-
-      // Leads should be present
-      if (!data.leads) {
-        console.log("No leads found for this profile");
-      } else {
-        // leads do exist
-        data.leads.forEach((val, index) => {
-          const refs = val.split("/");
-          console.log("REfs are", refs);
-
-          db.collection(refs[0]).doc(refs[1]).collection(refs[2]).doc(refs[3]).collection(refs[4]).doc(refs[5])
-            .get().then(doc2 => {
-              console.log(doc2.data());
-              var dic2 = doc2.data();
-              dic2["leadId"] = refs[5];
-              updatePosts(dic2, index);
-            })
-            .catch(err => {
-              console.log("error came", err);
-            });
-        })
-      }
-
-    }).catch(err => {
-      console.log("Error came while fetching", err);
-    });
 
 </script>
 {% endblock %}
