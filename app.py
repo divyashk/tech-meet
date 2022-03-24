@@ -100,8 +100,8 @@ def register_user():
 @app.route('/user_info', methods=['GET', 'POST'])
 @is_logged_in
 def user_info():
-    type = session['type']
-    user_info = db.collection(type).document(session['username']).get()
+    role = session["role"]
+    user_info = db.collection("users").document(session['username']).get()
 
     if user_info.exists:
         print("User exists")
@@ -131,10 +131,10 @@ def check_if_username_exists():
 
     req_data = request.json
 
-    print("Check if username exists in ", req_data["type"])
+    print("Check if username exists")
 
     if is_user_id_valid(req_data["username"]):
-        userid_ref = db.collection(req_data["type"]).document(
+        userid_ref = db.collection("users").document(
             req_data['username']).get()
 
         if userid_ref.exists:
@@ -160,7 +160,7 @@ def login_register():
         return redirect(url_for("profile"))
 
     data = request.json
-    fire_req_data = db.collection(data['type']).document(
+    fire_req_data = db.collection('users').document(
         data["username"]).get().to_dict()
     pass_hash = fire_req_data['password']
 
@@ -174,7 +174,7 @@ def login_register():
 
         session['logged_in'] = True
         session['username'] = data['username']
-        session['type'] = data['type']
+        session['role'] = data['role']
         return jsonify(success=True)
     else:
         print("Password does not match")
@@ -194,8 +194,8 @@ def home():
     username = ""
     if ("username" in session):
         username = session["username"]
-        type = "hospital"
-        return render_template(type + '/dashboard.html', username=username)
+        role = session["role"]
+        return render_template(role + '/dashboard.html', username=username)
     else:
         return render_template('index.html', username=username)
 
@@ -203,35 +203,21 @@ def home():
 @app.route('/me')
 @is_logged_in
 def get_me():
-    type = session['type']
-    return render_template(type + '/profile.html', isMe=True)
+    role = session['role']
+    return render_template(role + '/profile.html', isMe=True)
 
 
-@app.route('/patient/login')
-def patient_login():
+@app.route('/login')
+def login():
     if "logged_in" in session and session["logged_in"]:
         return redirect(url_for("profile"))
 
-    return render_template('patient/login.html')
-
-@app.route('/doctor/login')
-def doctor_login():
-    if "logged_in" in session and session["logged_in"]:
-        return redirect(url_for("profile"))
-
-    return render_template('doctor/login.html')
+    return render_template('login.html')
 
 @app.route('/doctor/<id>')
 def get_doctor_profile(id):
     # Returns the doctor profile page
     return render_template('doctor/profile.html')
-
-@app.route('/hospital/login')
-def hospital_login():
-    if "logged_in" in session and session["logged_in"]:
-        return redirect(url_for("profile"))
-
-    return render_template('hospital/login.html')
 
 @app.route('/hospital/<id>')
 def get_hospital_profile():
