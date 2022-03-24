@@ -85,6 +85,11 @@ def get_all_meds(hosp_id):
     except:
         return jsonify(success=False)
 
+@app.route('/medicines')
+def get_all_meds():
+    allMedsData = db.collection('medicine')
+
+    return jsonify(success=True, allMedsData=allMedsData)
 # Main
 if __name__ == '__main__':
     app.run(debug=True , port = 5004)
