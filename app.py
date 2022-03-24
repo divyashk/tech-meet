@@ -150,6 +150,37 @@ def check_if_username_exists():
     else:
         return jsonify(success=False, err_code='0')
 
+
+@app.route('/login', methods=['POST'])
+def login_register():
+    '''
+    The main login page which functions using the apis and all
+    '''
+    if "logged_in" in session and session["logged_in"]:
+        return redirect(url_for("profile"))
+
+    data = request.json
+    fire_req_data = db.collection(data['type']).document(
+        data["username"]).get().to_dict()
+    pass_hash = fire_req_data['password']
+
+    if sha256_crypt.verify(data["password"], pass_hash):
+        print("Password match successfully, login the user")
+
+        if data["username"] == "root":
+            # This is a superuser!!
+            session['is_super_user'] = True
+            session['super_user_secret'] = "admin@ppd"
+
+        session['logged_in'] = True
+        session['username'] = data['username']
+        session['type'] = data['type']
+        return jsonify(success=True)
+    else:
+        print("Password does not match")
+        return jsonify(success=False, err="Password does not match")
+
+
 """
 Routes
 """
@@ -159,10 +190,7 @@ def give_favicon():
 
 @app.route('/')
 def home():
-
-    type = "hospital"
-    return render_template(type + '/dashboard.html', username="priyam")
-
+    # Dashboard is returns depending on the username
     username = ""
     if ("username" in session):
         username = session["username"]
@@ -170,6 +198,13 @@ def home():
         return render_template(type + '/dashboard.html', username=username)
     else:
         return render_template('index.html', username=username)
+
+
+@app.route('/me')
+@is_logged_in
+def get_me():
+    type = session['type']
+    return render_template(type + '/profile.html', isMe=True)
 
 
 @app.route('/patient/login')
@@ -186,12 +221,22 @@ def doctor_login():
 
     return render_template('doctor/login.html')
 
+@app.route('/doctor/<id>')
+def get_doctor_profile(id):
+    # Returns the doctor profile page
+    return render_template('doctor/profile.html')
+
 @app.route('/hospital/login')
 def hospital_login():
     if "logged_in" in session and session["logged_in"]:
         return redirect(url_for("profile"))
 
     return render_template('hospital/login.html')
+
+@app.route('/hospital/<id>')
+def get_hospital_profile():
+    # Returns the hospital profile page
+    return render_template('hospital/profile.html')
 
 @app.route('/hospital/<id>/meds')
 def get_all_meds(id):
@@ -211,7 +256,6 @@ def get_all_meds(id):
     ]
 
     return jsonify(success=True, allMedsData=allMedsData)
-
 
 @app.route('/hospital/<id>/doctors')
 def get_all_doctors(id):
@@ -244,34 +288,6 @@ def get_all_beds(id):
 
     return jsonify(success=True, allBedsData=allBedsData)
 
-@app.route('/login', methods=['POST'])
-def login_register():
-    '''
-    The main login page which functions using the apis and all
-    '''
-    if "logged_in" in session and session["logged_in"]:
-        return redirect(url_for("profile"))
-
-    data = request.json
-    fire_req_data = db.collection(data['type']).document(
-        data["username"]).get().to_dict()
-    pass_hash = fire_req_data['password']
-
-    if sha256_crypt.verify(data["password"], pass_hash):
-        print("Password match successfully, login the user")
-
-        if data["username"] == "root":
-            # This is a superuser!!
-            session['is_super_user'] = True
-            session['super_user_secret'] = "admin@ppd"
-
-        session['logged_in'] = True
-        session['username'] = data['username']
-        session['type'] = data['type']
-        return jsonify(success=True)
-    else:
-        print("Password does not match")
-        return jsonify(success=False, err="Password does not match")
 
 @app.route('/doctor/me')
 @is_logged_in
