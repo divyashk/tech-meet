@@ -1,20 +1,12 @@
-from flask import Flask, json, render_template, jsonify, request, session, flash, redirect, url_for, send_file
-import utility
+from flask import Flask, json, render_template, jsonify, request, session, flash, redirect, url_for, send_file , Blueprint
 from werkzeug.utils import secure_filename
 from functools import wraps
-import os
-import time
-import math 
-import datetime
-import json
-import requests
+import os , time , math , datetime , json , requests , threading , re
 import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+from firebase_admin import credentials , firestore
 from dotenv import load_dotenv
-import threading
 from passlib.hash import sha256_crypt
-import re
+from blueprints import blueprint
 
 """
 Init 
@@ -24,6 +16,7 @@ cred = credentials.Certificate('creds.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 app = Flask(__name__)
+app.register_blueprint(blueprint)
 app.secret_key = os.getenv('SECRET_KEY')
 appointments_ms = "http://127.0.0.1:5001"
 authentication_ms = "http://127.0.0.1:5002"
