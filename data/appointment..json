@@ -15,7 +15,19 @@
         "desc": "Sueffering from high fever",
         "date": "30/07/2022",
         "patientId": "100001",
-        "doctorId": "dramarpreetmd"
+        "doctorId": "dramarpreetmd",
+        "appointment_data" : [
+            {
+                "name": "X RAY Report",
+                "date": "30/07/2022",
+                "image": "image_url"
+            },
+            {
+                "name": "X RAY Report",
+                "date": "30/07/2022",
+                "image": "image_url"
+            }
+        ]
     },
     "appointment2": {
         "prescription  ": [
