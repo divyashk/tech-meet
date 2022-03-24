@@ -237,7 +237,41 @@ def profile_others(id):
 
 @app.route('/book')
 def book_appointment():
-    return render_template('find.html')
+    return render_template('patient/book.html')
+
+@app.route('/hospital/all')
+def get_all_hospitals():
+    docs = db.collection('hospital').stream()
+
+    hospital_data = []
+    for doc in docs:
+        print(f'{doc.id} => {doc.to_dict()}')
+        hospital_data.append({
+            "username": doc.to_dict()["username"],
+            "hospital_name": doc.to_dict()["hospital_name"],
+            "doctors_username": doc.to_dict()["doctors_username"]
+        })
+    
+    return jsonify(success=True, hospitals_data=hospital_data)
+
+
+
+'''@app.route('/hospital/<id>/doctordata')
+def get_all_doctors(id):
+    # TODO VINAYAK
+
+    doctors_data = [
+        {
+            "doctor_name":"Dr. ABC",
+            "username":"abc123",
+            "degree":"MBBS, MD"
+        }
+
+    ]
+
+    return jsonify(success=True, doctor_data=doctors_data)
+'''
+
 
 @app.route('/logout')
 def logout():
