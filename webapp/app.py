@@ -18,10 +18,6 @@ db = firestore.client()
 app = Flask(__name__)
 app.register_blueprint(blueprint)
 app.secret_key = os.getenv('SECRET_KEY')
-appointments_ms = "http://127.0.0.1:5001"
-authentication_ms = "http://127.0.0.1:5002"
-# infra_ms = "http://127.0.0.1:5003"
-inventory_ms = "http://127.0.0.1:5004"
 
 """
 Functions

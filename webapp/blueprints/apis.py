@@ -1,5 +1,5 @@
 from . import blueprint
-from flask import request, session
+from flask import request, session , jsonify
 import requests
 
 appointments_ms = "http://127.0.0.1:5001"
@@ -56,8 +56,14 @@ def login():
   data = request.json
   url = authentication_ms + '/login'
   x = requests.post(url, json = data)
-  session.update(x.json()['session'])
-  return x.json()
+  res = x.json()
+  if(res['success']):
+    session['logged_in'] = True
+    session['username'] = data['username']
+    session['role'] = res['role']
+    return jsonify(success=True)
+  else:
+    return jsonify(success=False)
 
 
 """ Infrastructure Microservice APIs """
