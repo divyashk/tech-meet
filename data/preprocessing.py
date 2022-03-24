@@ -118,47 +118,47 @@ hospital_detail
 #%%
 print(hospital_detail)
 
-users_detail = []
-for index, row in hospital_detail.iterrows():
-    data = {
-        "name": row['hospital_name'],
-        "phone": row['phone_no'],
-        "username": row['username'],
-        "password": str(sha256_crypt.encrypt(row['password'])),
-        "role": 2
-    }
+# users_detail = []
+# for index, row in hospital_detail.iterrows():
+#     data = {
+#         "name": row['hospital_name'],
+#         "phone": row['phone_no'],
+#         "username": row['username'],
+#         "password": str(sha256_crypt.encrypt(row['password'])),
+#         "role": 2
+#     }
 
-    users_detail.append(data)
-
-
-for index, row in doctor_detail.iterrows():
-    data = {
-        "name": row['doctor_name'],
-        "phone": row['phone_no'],
-        "username": row['username'],
-        "password": str(sha256_crypt.encrypt(row['password'])),
-        "role": 1
-    }
-
-    users_detail.append(data)
+#     users_detail.append(data)
 
 
-for index, row in patient_detail.iterrows():
-    data = {
-        "name": row['patient_name'],
-        "phone": row['phone_number'],
-        "username": row['username'],
-        "password": str(sha256_crypt.encrypt(row['password'])),
-        "role": 0
-    }
+# for index, row in doctor_detail.iterrows():
+#     data = {
+#         "name": row['doctor_name'],
+#         "phone": row['phone_no'],
+#         "username": row['username'],
+#         "password": str(sha256_crypt.encrypt(row['password'])),
+#         "role": 1
+#     }
 
-    users_detail.append(data)
+#     users_detail.append(data)
 
-users_detail
+
+# for index, row in patient_detail.iterrows():
+#     data = {
+#         "name": row['patient_name'],
+#         "phone": row['phone_number'],
+#         "username": row['username'],
+#         "password": str(sha256_crypt.encrypt(row['password'])),
+#         "role": 0
+#     }
+
+#     users_detail.append(data)
+
+# users_detail
 #%%
-for row in users_detail:
-    db.collection('users').document(str(row['username'])).set(row, merge=True)
-    print("Added ", data)
+# for row in users_detail:
+#     db.collection('users').document(str(row['username'])).set(row, merge=True)
+#     print("Added ", data)
 
 #%% Adding dispensay and medicines data
 
@@ -234,4 +234,11 @@ for row in users_detail:
 #     db.collection('patient').document(str(row['username'])).set(data, merge=True)
 #     print("Added ", data)
 
-# %%
+# %% appointments
+fapnt = open('appointment.json')
+appointment_detail = json.load(fapnt)
+# print(appointment_detail)
+
+for key in appointment_detail:
+    db.collection('appointment').document(str(key)).set(appointment_detail[key], merge=True)
+    print("Added ", key)
