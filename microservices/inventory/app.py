@@ -18,7 +18,7 @@ app.secret_key = os.getenv('SECRET_KEY')
     Desc : Add item to inventory
     @json 
     {
-        {
+        med: {
             id : "some unique"  
             item_name : "paracetemol",
             quantity : 10,
@@ -31,6 +31,9 @@ app.secret_key = os.getenv('SECRET_KEY')
 def add_item_to_inv():
     data = request.json
     # Add item to inventory for a particular dispensary
+    db.collection('dispensary').document(data['dispensary']).update(
+            {u'meds': firestore.ArrayUnion([data['med']])})
+
     return True
 
 '''
@@ -48,8 +51,15 @@ def add_item_to_inv():
 def update_item_from_inv():
     data = request.json
     # Update an item in inventory for a particular dispensary ( for adjusting price, quantity, etc) 
-    return True
+    med=db.collection('dispensary').document(data['dispensary']).where(u'medId', u'==',data['id'])
+    new_data={}
+    if("price" in data):
+        new_data['price']=data['price']
+    if("quantity" in data):
+        new_data['quantity']=data['quantity']
+    med.set(new_data,merge=True)
 
+    return True
 
 '''
     Desc : Add item to inventory
@@ -59,16 +69,19 @@ def update_item_from_inv():
         dispensary: "name"
     }
 '''
-@app.route('/fetch/:item_name', methods=['GET'])
-def fetch_item_from_inv(item_name):
-    data = request.json
+@app.route('/fetch/<dispensary>/<item_name>', methods=['GET'])
+def fetch_item_from_inv(dispensary,item_name):
+    # data = request.json
     # Search for an item in inventory and return
-    return True
+    item=db.collection('dispensary').document(dispensary).where(u'medId', u'==',item_name).get().to_dict()
+    return jsonify(success=True,item=item)
 
 # TODO
-@app.route('/hospital/:hosp_id/getall', methods=['POST'])
+@app.route('/hospital/<hosp_id>/getall', methods=['POST'])
 def get_all_meds(hosp_id):
-    return True
+    disp_id=db.collection('hospital').document(hosp_id).get().to_dict()['dispensary']
+    meds=db.collection('dispensary').document(disp_id).get().to_dict()
+    return jsonify(success=True,meds=meds)
 
 # Main
 if __name__ == '__main__':
