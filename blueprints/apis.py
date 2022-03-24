@@ -33,6 +33,14 @@ def close_appointment():
 
 """ Authentication Microservice APIs """
 
+@blueprint.route("/authentication/username", methods=['POST'])
+def check_username():
+  data = request.json
+  url = authentication_ms + '/username'
+  x = requests.post(url, json = data)
+  return x.json()
+
+
 @blueprint.route("/authentication/create_account", methods=['POST'])
 def create_account():
   data = request.json

@@ -190,7 +190,7 @@ def home():
         role = session["role"]
         return render_template(role + '/dashboard.html', username=username)
     else:
-        return render_template('index.html', username=username)
+        return render_template('login.html', username=username)
 
 
 @app.route('/me')
@@ -286,6 +286,9 @@ def profile_others(id):
 
     return render_template("profile.html", username = id, isMe="no", loginuser=username)
 
+@app.route('/book')
+def book_appointment():
+    return render_template('find.html')
 
 @app.route('/logout')
 def logout():
