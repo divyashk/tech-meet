@@ -49,9 +49,6 @@ def is_user_id_valid(uid):
 
     return True
 
-def weight(i):
-    return 5*max(1 , math.log2(i/3600))
-
 """
 APIs
 """
