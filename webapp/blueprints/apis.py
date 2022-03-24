@@ -20,6 +20,8 @@ def book_appointment():
 def show_appointment():
   data = request.json
   url = appointments_ms + '/show_appointments'
+  print(data)
+  print(url)
   x = requests.post(url, json = data)
   return x.json()
 

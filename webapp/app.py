@@ -216,7 +216,6 @@ def get_all_beds(id):
             "patient_id": "value"
         }
     ]
-
     return jsonify(success=True, allBedsData=allBedsData)
 
 
@@ -225,17 +224,14 @@ def get_all_beds(id):
 def profile():
     if session['username']:
         username= session['username']
-
     return render_template("profile.html", username = username, isMe="yes", loginuser=username)
 
 @app.route('/profile/<id>')
 def profile_others(id):
     print("for id", id)
-
     username = ""
     if 'username' in session:
         username = session['username']
-
     return render_template("profile.html", username = id, isMe="no", loginuser=username)
 
 @app.route('/book')
@@ -248,32 +244,6 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
-
-
-
-
-
-
-"""
-Test routes
-"""
-
-# @app.route('/testfind')
-# def testfind():
-#     return render_template('testfind.html')
-
-# @app.route('/testvote')
-# def testvote():
-#     return render_template('testvote.html')
-
-# @app.route('/testdelete')
-# def testdelete():
-#     return render_template('testdelete.html')
-
-# @app.route('/testcomment')
-# def testcomment():
-#     return render_template('testcomment.html')
-
 @app.route('/dashboard')
 def dashboard_route():
     hospital_data = {
@@ -282,19 +252,6 @@ def dashboard_route():
     }
 
     return render_template('hospital_dashboard.html', hospital_data = hospital_data)
-
-
-# """Testing APIs in Microservices : How to make api calls"""
-
-# url = appointments_ms + "/book_appointment"
-# data = {
-#     "patient_id" : "random_patient_id",
-#     "doctor_id" : "random_doctor_id",
-#     "datetime" : "some datetime format",
-#     "description" : "details about disease"
-# }
-# x = requests.post(url, json = data)
-# print(x.text)
 
 """
 Main 

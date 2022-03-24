@@ -225,14 +225,22 @@
   var leadsData = [];
 
 // toggle function
-
-
-  fetch(`/show_appointments`)
+var data = {
+  userid : username
+}
+var payload = {
+  method: 'POST',
+  headers: {
+      'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(data),
+}
+  fetch(`/appointments/show_appointments` , payload)
     .then(res => res.json())
     .then(data => {
       console.log("all appointments data", data);
       const showappointments=data.open_appointments;
-      
+      console.log(showappointments)
       let showappointmentsHTML = "";
 
   for(let i=0; i < showappointments.length; i++) {

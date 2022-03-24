@@ -13,15 +13,6 @@ db = firestore.client()
 app = Flask(__name__)
 app.secret_key = "SECRET_FROM_ENV_ABC"
 
-def is_user_id_valid(uid):
-    # Return True or False depending on if the username is valid or not
-    # Does NOT check if the username already exists or 
-    # Extra layer of security kind of
-    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
-    if (regex.search(uid) != None):
-        return False
-    return True
-
 # Functions
 def add_patient_to_db(user_id="" , patient_data=""):
     # Add patient_data to patient's collection and also store "user_id"
@@ -31,8 +22,6 @@ def add_patient_to_db(user_id="" , patient_data=""):
         return True
     else:
         return False
-    # data={"age":"26","gender":"M","nhid":"_testing","password":"password test","patient_address":"xyz,abc","patient_name":"Mr X","phone_number":"9876543210","username":"_testing"}
-    # db.collection("patient").document("_testing").set(data, merge=True)
 
 def add_doctor_to_db(user_id ="", doctor_data=""):
     # Add doctor_data to doctor's collection and also store "user_id"
@@ -50,6 +39,14 @@ def add_hospital_to_db(user_id ="", hospital_data=""):
     else:
         return False
 
+def is_user_id_valid(uid):
+    # Return True or False depending on if the username is valid or not
+    # Does NOT check if the username already exists or 
+    # Extra layer of security kind of
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    if (regex.search(uid) != None):
+        return False
+    return True
 
 # APIs
 
@@ -63,7 +60,6 @@ def add_hospital_to_db(user_id ="", hospital_data=""):
         userdata : {object based on role}  
     }
 '''
-# @app.route('/register', methods=['POST'])
 @app.route('/create_account', methods=['POST'])
 def register_user():
     '''
@@ -108,22 +104,7 @@ def register_user():
     else:
         return jsonify(success=False, err_code='0')
 
-'''
-    Desc : Authenticate Login
-    @json 
-    {
-        email : "xyz@gmail.com"
-        passwd : "letmein"
-    }
-'''
-# @app.route('/login-check', methods=['POST'])
-# def user_login():
-    # data = request.json
-    
-    # return jsonify(success=True , role = 1)
-    # if failure
-    # return jsonify(success=False)
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST']) # TESTED
 def user_login():
     '''
     The main login page which functions using the apis and all
@@ -153,7 +134,7 @@ def user_login():
         print("Password does not match")
         return jsonify(success=False, err="Password does not match")
 
-@app.route('/username', methods=['POST'])
+@app.route('/username', methods=['POST']) # TESTED
 def check_if_username_exists():
     # needs username and check if the username exists or not
     # returns true and false depending on if it exists
