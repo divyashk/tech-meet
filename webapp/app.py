@@ -157,9 +157,7 @@ def get_doctor_profile(id):
 
 @app.route('/appointment/<id>')
 def doctor_id(id):
-    appointment_data = db.collection('appointment').document(id).get().to_dict()
-    print("Diagnos appointment data", appointment_data)
-    return render_template("doctor/diagnos.html", appointment_data=appointment_data)
+    return render_template("doctor/diagnos.html", appointment_id=id)
 
 @app.route('/hospital/<id>')
 def get_hospital_profile():

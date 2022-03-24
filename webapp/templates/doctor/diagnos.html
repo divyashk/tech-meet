@@ -100,6 +100,10 @@
             <h4> Diagnosis </h4>
         </div>
 
+        <div class="appointment_data">
+            <!-- from js -->
+        </div>
+
         <div class="">
             <div class="col s12">
                 <div class="row">
@@ -226,7 +230,7 @@
         elmnt.style.backgroundColor = "#26a69a";
     }
 
-    document.getElementById('appoint-btn').onclick = function() {
+    document.getElementById('appoint-btn').onclick = function () {
         console.log("Close appointment called");
     }
 
@@ -314,6 +318,9 @@
             instance.open();
         }
     });
+
+    const appointment_id = "{{ appointment_id }}";
+    console.log("Appointment data", appointment_id);
 
 </script>
 

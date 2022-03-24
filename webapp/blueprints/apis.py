@@ -33,6 +33,14 @@ def close_appointment():
   x = requests.post(url, json = data)
   return x.json()
 
+@blueprint.route("/appointment/get/<id>")
+def appointment_id(id):
+  data = request.json
+  print(data)
+  url = appointments_ms + '/appointment/get/' + id
+  x = requests.post(url, json = data)
+  return x.json()
+
 """ Authentication Microservice APIs """
 
 @blueprint.route("/authentication/username", methods=['POST'])
