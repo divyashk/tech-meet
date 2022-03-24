@@ -340,6 +340,21 @@
         $("#find-btn").css("display", "block");
     }
 
+    fetch('/inventory/medicines').then(res => res.json()).then(data => {
+        console.log("Medicines data ", data);
+
+        var optionsToAdd = "<option value=\"\" disabled selected>Choose Medicine</option>";
+
+        // querySnapshot.forEach((doc) => {
+        //     // console.log(doc.id, " => ", doc.data());
+        //     optionsToAdd += "<option value=\"" + doc.id + "\"> " + doc.id + " </option>"
+        // });
+
+        // Now update the options
+        $("#autocomplete-input-city").html(optionsToAdd);
+        $("#autocomplete-input-city").trigger('contentChanged');
+    });
+
     $(document).ready(function () {
         $('#autocomplete-input-city').autocomplete({
             data: {

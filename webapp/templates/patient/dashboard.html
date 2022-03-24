@@ -55,12 +55,20 @@
           <a class="waves-effect waves-light btn" href="/book"> New Appointment </a>
         </div>
 
-        <div id="curr_appointments">
-          Current appointments
+        <div id="Appointments">
+          <div style="text-align: center;">
+          <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-green-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div id="new_appointments">
-          New appointments
         </div>
       </div>
 
@@ -152,23 +160,34 @@
     home.style.display = "none";
   }
 
-  fetch(`/appointment/show_appointments`)
+
+  var data = {
+    userid: username
+  }
+  var payload = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }
+  fetch(`/appointments/show_appointments`, payload)
     .then(res => res.json())
     .then(data => {
       console.log("all appointments data", data);
       const showappointments = data.open_appointments;
-
-      let showappointmentsHTML = "";
+      console.log(showappointments);
+      let showappointmentsHTML = `<div id="open_appointments"> <h5> Open Appointments </h3>`;
 
       for (let i = 0; i < showappointments.length; i++) {
         showappointmentsHTML += `
-    <div class="card horizontal">                      
+    <a href="/appointment/${data.open_appointments[i].id}" class="card horizontal">                      
             <div class="card-stacked">
                 <div class="card-content">
-                    <div class="card-head"> ${open_appointments[i].desc} </div>
+                    <div class="card-head"> ${data.open_appointments[i].desc} </div>
                     
                     <div class="address" style="margin-top: 12px">
-                      ${open_appointments[i].date}
+                      ${data.open_appointments[i].date}
                     </div>
                 </div>
                 <div class="card-action">
@@ -178,35 +197,21 @@
                 </div>
             </div>
          
-        </div>
+        </a>
     `;
       }
 
-      document.getElementById("Appointments").innerHTML = showappointmentsHTML;
-      document.getElementById("Appointments").style.display = 'none';
+      showappointmentsHTML += `</div> <div id="closed_appointments"> <h5> Past Appointments </h5>`;
 
-
-    }).catch(err => {
-      console.log("Error", err);
-    });
-
-  fetch(`/appointment/show_appointments`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("all appointments data", data);
-      const showappointments = data.open_appointments;
-
-      let showappointmentsHTML = "";
-
-      for (let i = 0; i < showappointments.length; i++) {
+      for (let i = 0; i < data.closed_appointments.length; i++) {
         showappointmentsHTML += `
-    <div class="card horizontal">                      
+    <a href="/appointment/${data.closed_appointments[i].id}" class="card horizontal">                      
             <div class="card-stacked">
                 <div class="card-content">
-                    <div class="card-head"> ${open_appointments[i].desc} </div>
+                    <div class="card-head"> ${data.closed_appointments[i].desc} </div>
                     
                     <div class="address" style="margin-top: 12px">
-                      ${open_appointments[i].date}
+                      ${data.closed_appointments[i].date}
                     </div>
                 </div>
                 <div class="card-action">
@@ -216,17 +221,20 @@
                 </div>
             </div>
          
-        </div>
+        </a>
     `;
       }
 
+
+      showappointmentsHTML += "</div>"
       document.getElementById("Appointments").innerHTML = showappointmentsHTML;
-      document.getElementById("Appointments").style.display = 'none';
+      document.getElementById("Appointments").style.display = 'block';
 
 
     }).catch(err => {
       console.log("Error", err);
     });
+
 
   myFunction1()
 

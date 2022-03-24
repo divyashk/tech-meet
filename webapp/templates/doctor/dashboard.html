@@ -110,7 +110,7 @@
 
       for (let i = 0; i < showappointments.length; i++) {
         showappointmentsHTML += `
-    <a href="/appointment/appointmentId1" class="card horizontal">                      
+    <a href="/appointment/${data.open_appointments[i].id}" class="card horizontal">                      
             <div class="card-stacked">
                 <div class="card-content">
                     <div class="card-head"> ${data.open_appointments[i].desc} </div>
@@ -134,7 +134,7 @@
 
       for (let i = 0; i < data.closed_appointments.length; i++) {
         showappointmentsHTML += `
-    <a href="/appointment/appointmentId1" class="card horizontal">                      
+    <a href="/appointment/${data.closed_appointments[i].id}" class="card horizontal">                      
             <div class="card-stacked">
                 <div class="card-content">
                     <div class="card-head"> ${data.closed_appointments[i].desc} </div>
