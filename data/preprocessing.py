@@ -118,6 +118,48 @@ hospital_detail
 #%%
 print(hospital_detail)
 
+users_detail = []
+for index, row in hospital_detail.iterrows():
+    data = {
+        "name": row['hospital_name'],
+        "phone": row['phone_no'],
+        "username": row['username'],
+        "password": str(sha256_crypt.encrypt(row['password'])),
+        "role": 2
+    }
+
+    users_detail.append(data)
+
+
+for index, row in doctor_detail.iterrows():
+    data = {
+        "name": row['doctor_name'],
+        "phone": row['phone_no'],
+        "username": row['username'],
+        "password": str(sha256_crypt.encrypt(row['password'])),
+        "role": 1
+    }
+
+    users_detail.append(data)
+
+
+for index, row in patient_detail.iterrows():
+    data = {
+        "name": row['patient_name'],
+        "phone": row['phone_number'],
+        "username": row['username'],
+        "password": str(sha256_crypt.encrypt(row['password'])),
+        "role": 0
+    }
+
+    users_detail.append(data)
+
+users_detail
+#%%
+for row in users_detail:
+    db.collection('users').document(str(row['username'])).set(row, merge=True)
+    print("Added ", data)
+
 #%% Adding dispensay and medicines data
 
 # dispensary_file = open('dispensary.json')
@@ -128,13 +170,13 @@ print(hospital_detail)
 #     db.collection('dispensary').document(str(key)).set(dispensary_detail[key], merge=True)
 #     print("Added ", key)
 
-medicine_file = open('medicine.json')
-medicine_detail = json.load(medicine_file)
-medicine_detail
+# medicine_file = open('medicine.json')
+# medicine_detail = json.load(medicine_file)
+# medicine_detail
 
-for key in medicine_detail:
-    db.collection('medicine').document(str(key)).set(medicine_detail[key], merge=True)
-    print("Added ", key)
+# for key in medicine_detail:
+#     db.collection('medicine').document(str(key)).set(medicine_detail[key], merge=True)
+#     print("Added ", key)
 
 
 #%% Add hospital detail in firestore database
