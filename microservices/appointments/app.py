@@ -133,6 +133,11 @@ def close_appointment():
     except:
         return jsonify(success=False)
 
+@app.route('/appointment/get/<id>', methods=['POST'])
+def show_appointment_data(id):
+    ''' Show the appointment data of an id '''
+    return jsonify(success=True)
+
 # Main
 if __name__ == '__main__':
     app.run(debug=True , port = 5001)
