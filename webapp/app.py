@@ -49,9 +49,6 @@ def is_user_id_valid(uid):
 
     return True
 
-def weight(i):
-    return 5*max(1 , math.log2(i/3600))
-
 """
 APIs
 """
@@ -215,7 +212,6 @@ def get_all_beds(id):
             "patient_id": "value"
         }
     ]
-
     return jsonify(success=True, allBedsData=allBedsData)
 
 
@@ -224,54 +220,59 @@ def get_all_beds(id):
 def profile():
     if session['username']:
         username= session['username']
-
     return render_template("profile.html", username = username, isMe="yes", loginuser=username)
 
 @app.route('/profile/<id>')
 def profile_others(id):
     print("for id", id)
-
     username = ""
     if 'username' in session:
         username = session['username']
-
     return render_template("profile.html", username = id, isMe="no", loginuser=username)
 
 @app.route('/book')
 def book_appointment():
-    return render_template('find.html')
+    return render_template('patient/book.html')
+
+@app.route('/hospital/all')
+def get_all_hospitals():
+    docs = db.collection('hospital').stream()
+
+    hospital_data = []
+    for doc in docs:
+        print(f'{doc.id} => {doc.to_dict()}')
+        hospital_data.append({
+            "username": doc.to_dict()["username"],
+            "hospital_name": doc.to_dict()["hospital_name"],
+            "doctors_username": doc.to_dict()["doctors_username"]
+        })
+    
+    return jsonify(success=True, hospitals_data=hospital_data)
+
+
+
+'''@app.route('/hospital/<id>/doctordata')
+def get_all_doctors(id):
+    # TODO VINAYAK
+
+    doctors_data = [
+        {
+            "doctor_name":"Dr. ABC",
+            "username":"abc123",
+            "degree":"MBBS, MD"
+        }
+
+    ]
+
+    return jsonify(success=True, doctor_data=doctors_data)
+'''
+
 
 @app.route('/logout')
 def logout():
     session["logged_in"] = False
     session.clear()
     return redirect(url_for('home'))
-
-
-
-
-
-
-
-"""
-Test routes
-"""
-
-# @app.route('/testfind')
-# def testfind():
-#     return render_template('testfind.html')
-
-# @app.route('/testvote')
-# def testvote():
-#     return render_template('testvote.html')
-
-# @app.route('/testdelete')
-# def testdelete():
-#     return render_template('testdelete.html')
-
-# @app.route('/testcomment')
-# def testcomment():
-#     return render_template('testcomment.html')
 
 @app.route('/dashboard')
 def dashboard_route():
@@ -281,19 +282,6 @@ def dashboard_route():
     }
 
     return render_template('hospital_dashboard.html', hospital_data = hospital_data)
-
-
-# """Testing APIs in Microservices : How to make api calls"""
-
-# url = appointments_ms + "/book_appointment"
-# data = {
-#     "patient_id" : "random_patient_id",
-#     "doctor_id" : "random_doctor_id",
-#     "datetime" : "some datetime format",
-#     "description" : "details about disease"
-# }
-# x = requests.post(url, json = data)
-# print(x.text)
 
 """
 Main 

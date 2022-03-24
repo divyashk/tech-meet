@@ -94,16 +94,16 @@
 <div id="main" class="container">
     <div id="find_loc" class="d-flex w-50">
         <div id="find_loc_heading">
-            <h4>Enter your requirements</h4>
+            <h4>Book your Appointment!</h4>
         </div>
 
         <div class="row">
             <div class="col s12">
                 <div class="row">
                     <div class="input-field col s12">
-                        <i class="material-icons prefix">dashboard customize</i>
+                        <i class="material-icons prefix"></i>
                         <select id="autocomplete-input-item">
-                            <option value="" disabled selected>Choose Item</option>
+                            <option value="" disabled selected>Choose your Hospital</option>
                         </select>
                     </div>
                 </div>
@@ -114,9 +114,9 @@
             <div class="col s12">
                 <div class="row">
                     <div class="input-field col s12">
-                        <i class="material-icons prefix">map</i>
+                        <i class="material-icons prefix"></i>
                         <select id="autocomplete-input-state">
-                            <option value="" disabled selected>Choose State</option>
+                            <option value="" disabled selected>Choose Doctor</option>
                         </select>
                     </div>
                 </div>
@@ -127,9 +127,9 @@
             <div class="col s12">
                 <div class="row">
                     <div class="input-field col s12">
-                        <i class="material-icons prefix">location_on</i>
+                        <i class="material-icons prefix"></i>
                         <select id="autocomplete-input-city">
-                            <option value="" disabled selected>Choose City</option>
+                            <option value="" disabled selected>Availabale time slots</option>
                         </select>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
             </div>
         </div>
 
-        <a id="find-btn" class="waves-effect waves-light btn">Find</a>
+        <a id="find-btn" class="waves-effect waves-light btn">Book!</a>
     </div> <!-- End of find loc -->
 
     <div id="leads-container" style="display: none;">
@@ -554,7 +554,7 @@
             const data = { item: itemSelected };
 
             showAnimation();
-
+            //fetch the Doctor data from backend
             fetch('/get_states', {
                 method: 'POST', // or 'PUT'
                 headers: {
@@ -566,7 +566,7 @@
                 .then(data => {
                     console.log('Success:', data);
 
-                    var optionsToAdd = "<option value=\"\" disabled selected>Choose State</option>";
+                    var optionsToAdd = ""; //<option value=\"\" disabled selected>Choose State</option>
 
                     // Update the city
                     $("#autocomplete-input-city").html(optionsToAdd);
@@ -620,28 +620,56 @@
 
         });
 
-        db.collection("Inventory").get()
-            .then((querySnapshot) => {
 
-                console.log("Query snapshot of inventory");
-                // Loop in each query snapshot and add options in autocomplete-input-item
+        // FEtch the hospitals from the backend
+        fetch('/hospital/all')
+        .then(res => res.json())
+        .then(data => {
+            console.log("DATA fetched", data);
 
-                var optionsToAdd = "";
+            var optionsToAdd = "";
 
-                querySnapshot.forEach((doc) => {
-                    // console.log(doc.id, " => ", doc.data());
-                    optionsToAdd += "<option value=\"" + doc.id + "\"> " + doc.id + " </option>"
-                });
+            data.hospitals_data.forEach((doc) => {
+                // console.log(doc.id, " => ", doc.data());
+                optionsToAdd += "<option value=\"" + doc.username + "\"> " + doc.hospital_name + " </option>"
+            });
 
-                // Now update the options
-                $("#autocomplete-input-item").append(optionsToAdd);
-                $("#autocomplete-input-item").trigger('contentChanged');
+            // Now update the options
+            $("#autocomplete-input-item").append(optionsToAdd);
+            $("#autocomplete-input-item").trigger('contentChanged');
             })
             .catch((err) => {
                 console.log("Error came while fetching data", err);
             });
 
     });
+
+        //Fetch all Doctor's Data from the dummy data
+        fetch('/hospital/<id>/doctors')
+        .then(res => res.json())
+        .then(data => {
+            console.log("DATA fetched", data);
+
+            var optionsToAdd = "";
+
+            data.hospitals_data.forEach((doc) => {
+                // console.log(doc.id, " => ", doc.data());
+                optionsToAdd += "<option value=\"" + doc.username + "\"> " + doc._name + " </option>"
+            });
+
+            // Now update the options
+            $("#autocomplete-input-item").append(optionsToAdd);
+            $("#autocomplete-input-item").trigger('contentChanged');
+            })
+            .catch((err) => {
+                console.log("Error came while fetching data", err);
+            });
+
+
+
+
+
+
 
     handleVote = (leadIndex, toSet) => {
         if (username) {
@@ -760,6 +788,9 @@
             var leads = [];
             querySnapshot.forEach((doc) => {
                 var dic = doc.data();
+
+                print("dic", dic);
+
                 dic["leadId"] = doc.id;
                 leads.push(dic);
             });

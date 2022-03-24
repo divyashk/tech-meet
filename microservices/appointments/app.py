@@ -1,10 +1,10 @@
 from flask import Flask, json, render_template, jsonify, request, session, flash, redirect, url_for, send_file
-# from pymysql import NULL
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import os
 import requests
+
 # Initialization
 cred = credentials.Certificate('../../creds.json')
 firebase_admin.initialize_app(cred)
@@ -27,8 +27,6 @@ app.secret_key = "SECRET_FROM_ENV_MNO"
         description : "details about disease"
     }
 '''
-
-
 @app.route('/book_appointment', methods=['POST'])
 def book_appointment():
     data = request.json
@@ -61,8 +59,6 @@ def book_appointment():
         userid : "random_user_id"
     }
 '''
-
-
 @app.route('/show_appointments', methods=['POST'])
 def show_appointments():
     data = request.json
@@ -72,7 +68,6 @@ def show_appointments():
     # fetch the appointments array, then return the list of appointments whose status is open as json
 
     if(user_data['role'] == 0 or user_data['role'] == 1):
-
         appointments=[]
         if(user_data['role'] == 0):
             appointments = db.collection("patient").document(
@@ -82,13 +77,16 @@ def show_appointments():
                 data['userid']).get().to_dict()['appointments']
 
         open_appointments = []
+        closed_appointments = []
         for appointment in appointments:
-            app_data = db.collection('appointments').document(
+            app_data = db.collection('appointment').document(
                 appointment).get().to_dict()
             if app_data['status'] == "open":
                 open_appointments.append(app_data)
+            else:
+                closed_appointments.append(app_data)
 
-        return jsonify(success=True, open_appointments=open_appointments)
+        return jsonify(success=True, open_appointments=open_appointments , closed_appointments = closed_appointments)
 
     else:
 
@@ -105,15 +103,13 @@ def show_appointments():
         next_appointment : NULL or datetime
     }
 '''
-
-
 @app.route('/close_appointment', methods=['POST'])
 def close_appointment():
     data = request.json
     # Have to check doctor in main app.py itself
     try:
         # update appointment status as closed and also add the data received
-        current_appointment=db.collection('appointments').document(data['appointment_id'])
+        current_appointment=db.collection('appointment').document(data['appointment_id'])
         current_appointment.set({"description": data["description"], "prescription": data["prescription"],"next_appointment": data["next_appointment"], "status": "closed"}, merge=True)
 
         current_appointment_data=current_appointment.get().to_dict()
