@@ -161,6 +161,11 @@ def get_doctor_profile(id):
     # Returns the doctor profile page
     return render_template('doctor/profile.html')
 
+
+@app.route('/doctor/diagnosis')
+def diagnosys():
+    return render_template("doctor/diagnos.html")
+
 @app.route('/hospital/<id>')
 def get_hospital_profile():
     # Returns the hospital profile page
@@ -246,6 +251,8 @@ def logout():
     session["logged_in"] = False
     session.clear()
     return redirect(url_for('home'))
+
+
 
 
 
