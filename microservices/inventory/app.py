@@ -77,7 +77,7 @@ def fetch_item_from_inv(dispensary,item_name):
     return jsonify(success=True,item=item)
 
 @app.route('/hospital/<hosp_id>/getall', methods=['POST'])
-def get_all_meds(hosp_id):
+def get_all_hospital_meds(hosp_id):
     try:
         disp_id=db.collection('hospital').document(hosp_id).get().to_dict()['dispensary'][0]
         allMedsData=db.collection('dispensary').document(disp_id).get().to_dict()
