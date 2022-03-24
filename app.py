@@ -197,6 +197,8 @@ def get_all_doctors(id):
         }
     ]
 
+    #TODO VINAYAK used in hospital home page
+
     return jsonify(success=True, allDoctorsData=allDoctorsData)
 
 @app.route('/hospital/<id>/beds')
