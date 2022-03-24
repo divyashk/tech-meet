@@ -1,0 +1,38 @@
+{
+    "appointment1": {
+        "prescription  ": [
+            {
+                "medId": "medicineId1",
+                "price": 100,
+                "quantity": 4
+            },
+            {
+                "medId": "medicineId2",
+                "price": 100,
+                "quantity": 4
+            }
+        ],
+        "desc": "Sueffering from high fever",
+        "date": "30/07/2022",
+        "patientId": "100001",
+        "doctorId": "dramarpreetmd"
+    },
+    "appointment2": {
+        "prescription  ": [
+            {
+                "medId": "medicineId1",
+                "price": 100,
+                "quantity": 2
+            },
+            {
+                "medId": "medicineId2",
+                "price": 100,
+                "quantity": 2
+            }
+        ],
+        "desc": "Sueffering from low fever",
+        "date": "30/07/2022",
+        "patientId": "100001",
+        "doctorId": "dramarpreetmd"
+    }
+}
