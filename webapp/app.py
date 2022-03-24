@@ -49,9 +49,6 @@ def is_user_id_valid(uid):
 
     return True
 
-def weight(i):
-    return 5*max(1 , math.log2(i/3600))
-
 """
 APIs
 """
@@ -188,17 +185,16 @@ def get_all_meds(id):
 
 @app.route('/hospital/<id>/doctors')
 def get_all_doctors(id):
-    allDoctorsData = [
-        {
-            "username": "doc_username1",
-            "doctor_name": "doc NAme",
-            "degree": "Desgree",
-            "medical_profession": "Helo",
-            "phone_no": "9811417932"
-        }
-    ]
-
-    #TODO VINAYAK used in hospital home page
+    # allDoctorsData = [
+    #     {
+    #         "username": "doc_username1",
+    #         "doctor_name": "doc NAme",
+    #         "degree": "Desgree",
+    #         "medical_profession": "Helo",
+    #         "phone_no": "9811417932"
+    #     }
+    # ]
+    allDoctorsData=db.collection('hospital').document(id).get().to_dict()['doctors_username']
 
     return jsonify(success=True, allDoctorsData=allDoctorsData)
 
@@ -236,7 +232,41 @@ def profile_others(id):
 
 @app.route('/book')
 def book_appointment():
-    return render_template('find.html')
+    return render_template('patient/book.html')
+
+@app.route('/hospital/all')
+def get_all_hospitals():
+    docs = db.collection('hospital').stream()
+
+    hospital_data = []
+    for doc in docs:
+        print(f'{doc.id} => {doc.to_dict()}')
+        hospital_data.append({
+            "username": doc.to_dict()["username"],
+            "hospital_name": doc.to_dict()["hospital_name"],
+            "doctors_username": doc.to_dict()["doctors_username"]
+        })
+    
+    return jsonify(success=True, hospitals_data=hospital_data)
+
+
+
+'''@app.route('/hospital/<id>/doctordata')
+def get_all_doctors(id):
+    # TODO VINAYAK
+
+    doctors_data = [
+        {
+            "doctor_name":"Dr. ABC",
+            "username":"abc123",
+            "degree":"MBBS, MD"
+        }
+
+    ]
+
+    return jsonify(success=True, doctor_data=doctors_data)
+'''
+
 
 @app.route('/logout')
 def logout():
@@ -257,4 +287,4 @@ def dashboard_route():
 Main 
 """
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='127.0.0.1', port=5000)
