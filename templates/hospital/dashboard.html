@@ -1,0 +1,268 @@
+{% extends 'layouts/base.html' %}
+
+<!-- Profile.html for reference -->
+
+{% block css %}
+
+<link rel="stylesheet" href="/static/frontend/css/dashboard.css">
+
+{% endblock %}
+
+{% block body %}
+<div class="main-profile">
+  <div class="asked">
+
+    DASHBOARD
+
+    <div class="asked_footer">
+      <ul>
+        <li><button class="tablink" onclick="openPage('meds', this); myFunction1();" id="defaultOpen">Inventory</button></li>
+        <li><button class="tablink" id="leads-tab" onclick="openPage('doctors', this); myFunction2();">Room Info </button></li>
+        <li><button class="tablink" id="leads-tab" onclick="openPage('beds', this); myFunction3();"> Doctor Details </button></li>
+      </ul>
+    </div>
+
+    <div>
+
+      <div id="Home" class="tabcontent">
+        <div class="profile-content row">
+          <div class="profile-left col s6">
+            <div class="asked_profile">
+              <div class="asked_profile-content">
+                <img src="" id="pp" style="width:100%">
+                <h3 id="show-name-here" style="margin-bottom: 4px;"></h3>
+                <div class="rating"></div>
+              </div>
+            </div>
+            <p id="show-phone-here"> <i class="material-icons prefix" style="vertical-align: middle;">phone</i></p>
+          </div>
+          <div class="profile-right col s6">
+            <div id="rat-inp-con">
+              Ratings given by me
+              <div class="rating-input"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Inventory" id="meds" >
+        <!-- Cards will be added here by javascript -->
+        Hello wrold
+      </div>
+
+      <div id="beds" class="bedsinfo">
+        
+      </div>
+      <div id="doctors" class="doctorsinfo">
+        
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+  let show_meds=false,show_beds=false,show_doctors=false;
+  if (location.hash == "#About") {
+    document.getElementById("leads-tab").click();
+  } else if (location.hash == "#") {
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+  }
+
+
+  function openPage(pageName, elmnt) {
+    console.log("Open page callsed");
+
+    // Hide all elements with class="tabcontent" by default */
+    // var i, tabcontent, tablinks;
+    // tabcontent = document.getElementsByClassName("tabcontent");
+    // for (i = 0; i < tabcontent.length; i++) {
+    //   tabcontent[i].style.display = "none";
+    // }
+
+    location.hash = pageName;
+
+    // Remove the background color of all tablinks/buttons
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].style.backgroundColor = "";
+    }
+
+    // Show the specific tab content
+    document.getElementById(pageName).style.display = "block";
+
+    // Add the specific color to the button used to open the tab content
+    elmnt.style.backgroundColor = "#26a69a";
+  }
+
+  const db = firebase.firestore();
+  const username = "{{username}}";
+  const isMe = "{{ isMe }}";
+  const loginuser = "{{ loginuser }}";
+
+  var leadsData = [];
+
+// toggle function
+  function myFunction1() {
+  var x = document.getElementById("meds");
+  var y = document.getElementById("beds");
+  var z = document.getElementById("doctors");
+  x.style.display = "block";
+  y.style.display = "none";
+  z.style.display = "none";
+  var home = document.getElementById("Home");
+  home.style.display = "none";
+}
+
+function myFunction2() {
+  var x = document.getElementById("meds");
+  var y = document.getElementById("beds");
+  var z = document.getElementById("doctors");
+  x.style.display = "none";
+  y.style.display = "block";
+  z.style.display = "none";
+  var home = document.getElementById("Home");
+  home.style.display = "none";
+}
+
+function myFunction3() {
+  var x = document.getElementById("meds");
+  var y = document.getElementById("beds");
+  var z = document.getElementById("doctors");
+  x.style.display = "none";
+  y.style.display = "none";
+  z.style.display = "block";
+  var home = document.getElementById("Home");
+  home.style.display = "none";
+}
+
+  fetch(`/hospital/${username}/meds`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("all meds data", data);
+      const allMedsData=data.allMedsData;
+      
+      let allMedsDataHTML = "";
+
+  for(let i=0; i < allMedsData.length; i++) {
+    allMedsDataHTML += `
+    <div class="card horizontal">                      
+            <div class="card-stacked">
+                <div class="card-content">
+                    <div class="card-head"> ${allMedsData[i].item_name} </div>
+                    
+                    <div class="address" style="margin-top: 12px">
+                      Quantity->${allMedsData[i].quantity}
+                    </div>
+                </div>
+                <div class="card-action">
+                  Price->${allMedsData[i].price}
+                    <div>
+                    
+                    </div>
+                </div>
+            </div>
+         
+        </div>
+    `;
+  }
+
+  document.getElementById("meds").innerHTML=allMedsDataHTML;
+  document.getElementById("meds").style.display='none';
+
+
+    }).catch(err => {
+      console.log("Error", err);
+    });
+        
+    fetch(`/hospital/${username}/beds`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("all beds data", data);
+
+      const allBedsData = data.allBedsData;
+
+      let allBedsDataHTML = "";
+      console.log("debugging",allBedsData);
+      for(let i=0; i < allBedsData.length; i++) {
+        allBedsDataHTML += `
+        <div class="card horizontal">                      
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <div class="card-head"> ${allBedsData[i].room_no} </div>
+                        
+                        <div class="address" style="margin-top: 12px">
+                          ${allBedsData[i].hospital_id}
+                        </div>
+                    </div>
+                    <div class="card-action">
+                      ${allBedsData[i].patient_id}
+                        <div>
+                        
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        `;
+      }
+
+      document.getElementById("beds").innerHTML = allBedsDataHTML;
+      document.getElementById("beds").style.display='none';
+
+    }).catch(err => {
+      console.log("Error", err);
+    });
+
+    fetch(`/hospital/${username}/doctors`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("all doctors data", data);
+
+      const allDoctorsData = data.allDoctorsData;
+
+      let allDoctorsDataHTML = "";
+      for(let i=0; i < allDoctorsData.length; i++) {
+        allDoctorsDataHTML += `
+        <div class="card horizontal">                      
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <div class="card-head"> ${allDoctorsData[i].doctor_name} </div>
+                        
+                        <div class="address" style="margin-top: 12px">
+                          ${allDoctorsData[i].degree}
+                        </div>
+                        
+                    </div>
+                    <div class="card-action">
+                      ${allDoctorsData[i].medical_profession}
+                        <div>
+                        
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        `;
+      }
+
+      document.getElementById("doctors").innerHTML = allDoctorsDataHTML;
+      document.getElementById("doctors").style.display='none';
+
+    }).catch(err => {
+      console.log("Error", err);
+    });
+  
+
+
+</script>
+{% endblock %}

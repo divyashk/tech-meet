@@ -1,0 +1,242 @@
+{% extends 'layouts/base.html' %}
+
+<!-- Profile.html for reference -->
+
+{% block css %}
+
+<link rel="stylesheet" href="/static/frontend/css/dashboard.css">
+
+{% endblock %}
+
+{% block body %}
+<div class="main-profile">
+  <div class="asked">
+
+    <div class="center">
+      Patient Dashboard
+    </div>
+
+    <div class="asked_footer">
+      <ul>
+        <li><button class="tablink" onclick="openPage('showappointments', this); myFunction1();"
+            id="defaultOpen">Appointments</button></li>
+        <li><button class="tablink" id="leads-tab" onclick="openPage('meds', this); myFunction2();"> Inventory </button>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+
+      <div id="Home" class="tabcontent">
+        <div class="profile-content row">
+          <div class="profile-left col s6">
+            <div class="asked_profile">
+              <div class="asked_profile-content">
+                <img src="" id="pp" style="width:100%">
+                <h3 id="show-name-here" style="margin-bottom: 4px;"></h3>
+                <div class="rating"></div>
+              </div>
+            </div>
+            <p id="show-phone-here"> <i class="material-icons prefix" style="vertical-align: middle;">phone</i></p>
+          </div>
+          <div class="profile-right col s6">
+            <div id="rat-inp-con">
+              Ratings given by me
+              <div class="rating-input"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="history" id="showappointments">
+        <!-- Cards will be added here by javascript -->
+
+        <div class="new-appointment-div">
+          <a class="waves-effect waves-light btn" href="/book"> New Appointment </a>
+        </div>
+
+        <div id="Appointments">
+          <div style="text-align: center;">
+          <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-green-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div id="meds" class="Inventory">
+        Hello meds
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+  let show_meds = false, show_beds = false, show_doctors = false;
+  if (location.hash == "#About") {
+    document.getElementById("leads-tab").click();
+  } else if (location.hash == "#") {
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+  }
+
+
+  function openPage(pageName, elmnt) {
+    console.log("Open page callsed");
+
+    // Hide all elements with class="tabcontent" by default */
+    // var i, tabcontent, tablinks;
+    // tabcontent = document.getElementsByClassName("tabcontent");
+    // for (i = 0; i < tabcontent.length; i++) {
+    //   tabcontent[i].style.display = "none";
+    // }
+
+    location.hash = pageName;
+
+    // Remove the background color of all tablinks/buttons
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].style.backgroundColor = "";
+    }
+
+    // Show the specific tab content
+    document.getElementById(pageName).style.display = "block";
+
+    // Add the specific color to the button used to open the tab content
+    elmnt.style.backgroundColor = "#26a69a";
+  }
+
+  const db = firebase.firestore();
+  const username = "{{username}}";
+  const isMe = "{{ isMe }}";
+  const loginuser = "{{ loginuser }}";
+
+  var leadsData = [];
+
+  // toggle function
+  function myFunction1() {
+    var x = document.getElementById("showappointments");
+    var y = document.getElementById("meds");
+    x.style.display = "block";
+    y.style.display = "none";
+    var home = document.getElementById("Home");
+    home.style.display = "none";
+  }
+
+  function myFunction2() {
+    var x = document.getElementById("showappointments");
+    var y = document.getElementById("meds");
+    x.style.display = "none";
+    y.style.display = "block";
+    var home = document.getElementById("Home");
+    home.style.display = "none";
+  }
+
+  function myFunction3() {
+    var x = document.getElementById("showappointments");
+    var y = document.getElementById("beds");
+    var z = document.getElementById("doctors");
+    x.style.display = "none";
+    y.style.display = "none";
+    z.style.display = "block";
+    var home = document.getElementById("Home");
+    home.style.display = "none";
+  }
+
+
+  var data = {
+    userid: username
+  }
+  var payload = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }
+  fetch(`/appointments/show_appointments`, payload)
+    .then(res => res.json())
+    .then(data => {
+      console.log("all appointments data", data);
+      const showappointments = data.open_appointments;
+      console.log(showappointments);
+      let showappointmentsHTML = `<div id="open_appointments"> <h5> Open Appointments </h3>`;
+
+      for (let i = 0; i < showappointments.length; i++) {
+        showappointmentsHTML += `
+    <a href="/appointment/${data.open_appointments[i].id}" class="card horizontal">                      
+            <div class="card-stacked">
+                <div class="card-content">
+                    <div class="card-head"> ${data.open_appointments[i].desc} </div>
+                    
+                    <div class="address" style="margin-top: 12px">
+                      ${data.open_appointments[i].date}
+                    </div>
+                </div>
+                <div class="card-action">
+                    <div>
+                    
+                    </div>
+                </div>
+            </div>
+         
+        </a>
+    `;
+      }
+
+      showappointmentsHTML += `</div> <div id="closed_appointments"> <h5> Past Appointments </h5>`;
+
+      for (let i = 0; i < data.closed_appointments.length; i++) {
+        showappointmentsHTML += `
+    <a href="/appointment/${data.closed_appointments[i].id}" class="card horizontal">                      
+            <div class="card-stacked">
+                <div class="card-content">
+                    <div class="card-head"> ${data.closed_appointments[i].desc} </div>
+                    
+                    <div class="address" style="margin-top: 12px">
+                      ${data.closed_appointments[i].date}
+                    </div>
+                </div>
+                <div class="card-action">
+                    <div>
+                    
+                    </div>
+                </div>
+            </div>
+         
+        </a>
+    `;
+      }
+
+
+      showappointmentsHTML += "</div>"
+      document.getElementById("Appointments").innerHTML = showappointmentsHTML;
+      document.getElementById("Appointments").style.display = 'block';
+
+
+    }).catch(err => {
+      console.log("Error", err);
+    });
+
+
+  myFunction1()
+
+</script>
+{% endblock %}

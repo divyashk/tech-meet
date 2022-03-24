@@ -1,0 +1,170 @@
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap");
+
+.main-profile {
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  position: relative;
+}
+
+.asked {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  max-width: 777px;
+  flex-direction: column;
+  background-color: var(--box-color);
+  padding: 8px;
+  margin: 32px 12px;
+  border-radius: 33px;
+  width: 95%;
+}
+
+.asked_profile {
+  display: flex;
+  align-items: center;
+}
+
+.asked_profile-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.asked_profile-content h3 {
+  font-weight: bold;
+  font-size: 25px;
+  line-height: 32px;
+}
+
+.asked_profile-content button {
+  border: 2px solid #0f1c52;
+  background-color: transparent;
+  padding: 15px 15px;
+  cursor: pointer;
+  border-radius: 10px;
+  margin-top: 7px;
+}
+
+.asked_profile-content button:hover {
+  color: white;
+  transition-duration: 350ms;
+}
+
+.asked_footer ul {
+  display: flex;
+  list-style: none;
+  justify-content: space-between;
+  margin-top: 16px;
+  border-top: 2px solid #ccd1e6;
+  border-bottom: 2px solid #ccd1e6;
+}
+
+.asked_footer ul li {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 6px;
+  cursor: pointer;
+}
+
+.asked_footer ul li:hover {
+  transition-duration: 300ms;
+}
+
+.asked_footer ul li:last-child .down {
+  margin-left: 11px;
+}
+
+#profile-tab {
+  width: 100%;
+}
+
+/* Style tab links */
+.tablink {
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 10px;
+  font-size: 12px;
+  width: 100%;
+  background-color: var(--lightr-shade);
+}
+
+.tablink:hover {
+  background-color: var(--normal-shade);
+  ;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+  color: black;
+  /* display: none; */
+  padding: 32px 20px;
+  height: 100%;
+}
+
+.rating {
+  color: orange;
+}
+
+.rating-input {
+  color: orange;
+  cursor: pointer;
+}
+
+.profile-right {
+  text-align: right;
+  margin-top: 32px;
+}
+
+.myForm {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 0.8em;
+  width: 30em;
+  padding: 1em;
+}
+
+.myForm * {
+  box-sizing: border-box;
+}
+
+.myForm label {
+  padding: 0;
+  font-weight: bold;
+  text-align: right;
+  display: block;
+}
+
+.myForm input,
+.myForm select,
+.myForm textarea {
+  margin-left: 2em;
+  float: right;
+  width: 20em;
+  border: 1px solid #ccc;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 0.9em;
+  padding: 0.3em;
+}
+
+.myForm textarea {
+  height: 100px;
+}
+
+.myForm button {
+  padding: 1em;
+  border-radius: 0.5em;
+  background: #eee;
+  border: none;
+  font-weight: bold;
+  margin-left: 14em;
+  margin-top: 1.8em;
+}
+
+.myForm button:hover {
+  background: #ccc;
+  cursor: pointer;
+}

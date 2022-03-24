@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block title %}
+    <title>Home</title>
+    {% endblock %}
+
+    
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="/static/frontend/css/style.css">
+
+    <style>
+        .nav-my-info {
+            display: flex;
+        }
+
+        .nav-my-img {
+            padding: 8px;
+        }
+        .sidenav li>a {
+            display: flex;
+        }
+        .nav-my-name {
+            padding: 8px;
+        }
+    </style>
+
+    {% block css %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+    {% block nav %}
+    <ul id="dropdown1" class="dropdown-content">
+        <li><a href="/profile">Profile</a></li>
+        <li class="divider"></li>
+        <li><a id="signout-btn-nav" href="/logout">Signout</a></li>
+    </ul>
+
+    <ul class="sidenav" id="mobile-demo" >
+        {% if username %}
+        <li>
+            <div class="nav-my-info">
+                <div class="nav-my-img">
+                    <i class="material-icons" style="font-size: 50px; color: #26a69a;">account_circle</i>
+                </div>
+                <div class="nav-my-name">
+                    Priyam Seth
+                </div>
+            </div>
+        </li>
+        {% else %}
+        <li>
+            <a class="nav-my-info" href="/">
+                <div class="nav-my-img">
+                    <i class="material-icons" style="font-size: 50px; color: #26a69a;">account_circle</i>
+                </div>
+                <div class="nav-my-name">
+                    Login
+                </div>
+            </a>
+        </li>
+        {% endif %}
+
+        <li class="divider"></li>
+
+        {% if username %}
+        <li><a id="signout-btn-nav" href="/logout">Signout</a></li>
+        {% endif %}
+    </ul>
+
+
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo" style="margin-left: 10px;">Healthify</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <!-- Dropdown Trigger -->
+                <li id="nav_dropdown"></li>
+            </ul>
+        </div>
+    </nav>
+        
+    <div id="just-img"></div>
+
+    {% endblock %}
+            
+    {% block body %}
+    {% endblock %}
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-firestore.js"></script>
+
+    <script>
+
+        
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyBnDFlsf5FRDzDm6sB4Pj7RM_k-gNnkH4w",
+            authDomain: "frosthack-2021.firebaseapp.com",
+            projectId: "frosthack-2021",
+            storageBucket: "frosthack-2021.appspot.com",
+            messagingSenderId: "448081806395",
+            appId: "1:448081806395:web:34684610c774175fc9881e",
+            measurementId: "G-BSYTQFVJP2"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        
+            
+        
+
+    </script>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/static/frontend/js/verification.js"></script>
+    <script src="/static/frontend/js/main.js"></script>
+
+    {% block js %}
+    {% endblock %}
+</body>
+    

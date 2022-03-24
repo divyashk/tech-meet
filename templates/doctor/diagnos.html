@@ -1,0 +1,327 @@
+{% extends 'layouts/base.html' %}
+
+{% block css %}
+<style>
+    #header {
+        margin-bottom: 24px;
+        display: flex;
+        flex-flow: row;
+    }
+
+    .right {
+        margin-left: auto;
+    }
+
+    @media (max-width: 600px) {
+        #header {
+            display: block;
+        }
+
+        #dash-btn {
+            margin: 0 12px;
+        }
+    }
+
+    .card-action {
+        display: flex;
+    }
+
+    .modal-footer {
+        display: flex;
+        text-align: left;
+        margin-bottom: 12px;
+        border-top: 1px solid #7c7c7c;
+    }
+
+    .modal-footer .input-field {
+        flex: auto;
+    }
+
+    #modal1 .modal-close {
+        position: absolute;
+        right: 12px;
+        top: 24px;
+        z-index: 1004;
+    }
+
+    #post-comments {
+        margin: 8px 0;
+        max-height: 400px;
+        overflow: auto;
+    }
+
+    #post-comments .comment {
+        padding: 4px 8px;
+    }
+
+    #post-comments .comment p {
+        margin: 2px 0;
+    }
+
+    /* Style tab links */
+    .tablink {
+        color: white;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        font-size: 17px;
+        width: 100%;
+        background-color: var(--lightr-shade);
+    }
+
+    .tablink:hover {
+        background-color: var(--normal-shade);
+        ;
+    }
+
+    /* Style the tab content (and add height:100% for full page content) */
+    .tabcontent {
+        color: black;
+        display: none;
+        padding: 32px 20px;
+        height: 100%;
+    }
+
+    #pres-table {
+        margin-bottom: 8px;
+    }
+</style>
+<link rel="stylesheet" href="/static/frontend/css/comments.css">
+
+{% endblock %}
+
+{% block body %}
+
+<div id="main" class="container">
+    <div id="find_loc" class="d-flex w-50">
+        <div id="find_loc_heading">
+            <h4> Diagnosis </h4>
+        </div>
+
+        <div class="appointment_data">
+            <!-- from js -->
+        </div>
+
+        <div class="">
+            <div class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix"></i>
+                        <select id="autocomplete-input-item">
+                            <option value="" disabled selected>Choose Prescription</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="">
+            <div class="col s12">
+                <div class="row">
+                    <div class="input-field col s12" style="">
+                        <input id="last_name" type="number" class="validate">
+                        <label for="last_name">Enter quantity</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <button id="add-pres" class="waves-effect waves-light btn">Add Prescription</button>
+
+        <br><br>
+
+        <div id="pres-table">
+            <!-- added by js -->
+        </div>
+
+        <div id="loading-anim" style="text-align: center; display: none;">
+            <div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a id="appoint-btn" class="waves-effect waves-light btn">Close Appointment</a>
+    </div> <!-- End of find loc -->
+
+</div> <!-- End of main -->
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+    let presciptionData = [];
+
+    document.getElementById("add-pres").onclick = function () {
+        console.log("Hello");
+
+        presciptionData.push({
+            medId: document.getElementById('autocomplete-input-item').value,
+            name: document.getElementById('autocomplete-input-item').value,
+            quantity: document.getElementById('last_name').value
+        });
+
+        let tBody = ``;
+
+        console.log("pres data", presciptionData);
+
+        for (let i = 0; i < presciptionData.length; i++) {
+            tBody += `
+            <tr>
+                <td>${presciptionData[i].name}</td>
+                <td>${presciptionData[i].quantity}</td>
+            </tr>`;
+        }
+
+        let presHTML = `
+        <table>
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Qauntity</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            ${tBody}
+        </tbody>
+      </table>
+      `;
+
+        document.getElementById('pres-table').innerHTML = presHTML;
+
+    }
+
+    function openPage(pageName, elmnt) {
+        console.log("Open page callsed");
+
+        // Hide all elements with class="tabcontent" by default */
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remove the background color of all tablinks/buttons
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+
+        // Show the specific tab content
+        document.getElementById(pageName).style.display = "block";
+
+        // Add the specific color to the button used to open the tab content
+        elmnt.style.backgroundColor = "#26a69a";
+    }
+
+    document.getElementById('appoint-btn').onclick = function () {
+        console.log("Close appointment called");
+    }
+
+
+    $('#live-chat header').on('click', function () {
+
+        $('.chat').slideToggle(300, 'swing');
+        $('.chat-message-counter').fadeToggle(300, 'swing');
+
+    });
+
+    $('.chat-close').on('click', function (e) {
+
+        e.preventDefault();
+        $('#live-chat').fadeOut(300);
+
+    });
+
+    const username = "{{ username }}";
+    var leadsData = [];
+    var globalCity = "";
+    var globalState = "";
+    var globalItem = "";
+    var leadSelected = "";
+
+    const byId = (id) => { return document.getElementById(id); }
+
+    function showAnimation() {
+        $("#loading-anim").css("display", "block");
+        $("#find-btn").css("display", "none");
+    }
+
+    function hideAnimation() {
+        $("#loading-anim").css("display", "none");
+        $("#find-btn").css("display", "block");
+    }
+
+    fetch('/inventory/medicines').then(res => res.json()).then(data => {
+        console.log("Medicines data ", data);
+
+        var optionsToAdd = "<option value=\"\" disabled selected>Choose Medicine</option>";
+
+        for (let id in data) {
+            // console.log(doc.id, " => ", doc.data());
+            optionsToAdd += "<option value=\"" + id + "\"> " + data[id].name + " </option>"
+        }
+
+        // Now update the options
+        $("#autocomplete-input-item").html(optionsToAdd);
+        $("#autocomplete-input-item").trigger('contentChanged');
+    });
+
+    $(document).ready(function () {
+        $('#autocomplete-input-city').autocomplete({
+            data: {
+                "Apple": null,
+                "Microsoft": null,
+                "Google": null
+            },
+        });
+
+        handleModalClose = () => {
+            console.log("Modal close");
+
+            window.firebaseCommentsListener();
+        }
+
+        $('.modal').modal({
+            onCloseStart: function () { handleModalClose(); }
+        });
+
+        $('select').formSelect();
+
+        $('select').on('contentChanged', function () {
+            $(this).formSelect();
+        });
+
+        openModal = (index, e) => {
+            console.log("index", index);
+
+            leadSelected = leadsData[index].leadId;
+            // Set the data here
+
+            var instance = M.Modal.getInstance(document.getElementById("modal1"));
+            instance.open();
+        }
+    });
+
+    const appointment_id = "{{ appointment_id }}";
+    console.log("Appointment data", appointment_id);
+
+</script>
+
+{% endblock %}
