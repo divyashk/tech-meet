@@ -9,7 +9,7 @@ cred = credentials.Certificate('../../creds.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = "SECRET_FROM_ENV_XYZ"
 
 
 # APIs

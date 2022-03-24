@@ -11,7 +11,7 @@ cred = credentials.Certificate('../../creds.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = "SECRET_FROM_ENV_ABC"
 
 def is_user_id_valid(uid):
     # Return True or False depending on if the username is valid or not
