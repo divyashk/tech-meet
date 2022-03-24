@@ -16,8 +16,9 @@
 
     <div class="asked_footer">
       <ul>
-        <li><button class="tablink" onclick="openPage('Appointments', this); " id="defaultOpen">Appointments</button></li>
-       
+        <li><button class="tablink" onclick="openPage('Appointments', this); " id="defaultOpen">Appointments</button>
+        </li>
+
       </ul>
     </div>
 
@@ -44,9 +45,9 @@
         </div>
       </div>
 
-      <div class="doctor" id="Appointments" >
+      <div class="doctor" id="Appointments">
         <!-- Cards will be added here by javascript -->
-    </div>
+      </div>
     </div>
 
   </div>
@@ -61,7 +62,7 @@
 {% block js %}
 
 <script>
-  let show_meds=false,show_beds=false,show_doctors=false;
+  let show_meds = false, show_beds = false, show_doctors = false;
   if (location.hash == "#About") {
     document.getElementById("leads-tab").click();
   } else if (location.hash == "#") {
@@ -102,34 +103,34 @@
 
   var leadsData = [];
 
-// toggle function
-var data = {
-  userid : username
-}
-var payload = {
-  method: 'POST',
-  headers: {
+  // toggle function
+  var data = {
+    userid: username
+  }
+  var payload = {
+    method: 'POST',
+    headers: {
       'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-}
-  fetch(`/appointments/show_appointments` , payload)
+    },
+    body: JSON.stringify(data),
+  }
+  fetch(`/appointments/show_appointments`, payload)
     .then(res => res.json())
     .then(data => {
       console.log("all appointments data", data);
-      const showappointments=data.open_appointments;
+      const showappointments = data.open_appointments;
       console.log(showappointments)
       let showappointmentsHTML = "";
 
-  for(let i=0; i < showappointments.length; i++) {
-    showappointmentsHTML += `
+      for (let i = 0; i < showappointments.length; i++) {
+        showappointmentsHTML += `
     <div class="card horizontal">                      
             <div class="card-stacked">
                 <div class="card-content">
-                    <div class="card-head"> ${open_appointments[i].desc} </div>
+                    <div class="card-head"> ${data.open_appointments[i].desc} </div>
                     
                     <div class="address" style="margin-top: 12px">
-                      ${open_appointments[i].date}
+                      ${data.open_appointments[i].date}
                     </div>
                 </div>
                 <div class="card-action">
@@ -141,16 +142,16 @@ var payload = {
          
         </div>
     `;
-  }
+      }
 
-  document.getElementById("Appointments").innerHTML=showappointmentsHTML;
-  document.getElementById("Appointments").style.display='none';
+      document.getElementById("Appointments").innerHTML = showappointmentsHTML;
+      document.getElementById("Appointments").style.display = 'none';
 
 
     }).catch(err => {
       console.log("Error", err);
     });
-  
+
 
 
 </script>
