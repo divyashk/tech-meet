@@ -1,9 +1,9 @@
 FROM python:3.8-slim-buster
 # Install dependencies:
-COPY requirements.txt .
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 EXPOSE 5000
-COPY inventory.py .
-COPY creds.json .
+COPY ./microservices/inventory/app.py .
+COPY ./creds.json .
 # Run the application:
-CMD python inventory.py
+CMD python app.py

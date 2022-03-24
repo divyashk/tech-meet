@@ -1,9 +1,9 @@
 FROM python:3.8-slim-buster
 # Install dependencies:
-COPY requirements.txt .
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 EXPOSE 5000
-COPY infra.py .
-COPY creds.json .
+COPY ./microservices/infra/app.py .
+COPY ./creds.json .
 # Run the application:
-CMD python infra.py
+CMD python app.py
