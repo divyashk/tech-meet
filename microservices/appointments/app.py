@@ -1,5 +1,5 @@
 from flask import Flask, json, render_template, jsonify, request, session, flash, redirect, url_for, send_file
-from pymysql import NULL
+# from pymysql import NULL
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -32,26 +32,28 @@ app.secret_key = os.getenv('SECRET_KEY')
 @app.route('/book_appointment', methods=['POST'])
 def book_appointment():
     data = request.json
-    try:
-        # store this data (also add status = open) in appointments collection and get appointment id
-        data['status'] = "open"
-        data['appointment_id'] = data['patient_id'] + "_"+data['doctor_id']+"_"+data['datetime']
-        db.collection("appointments").document(
-            data['appointment_id']).set(data, merge=True)
+    print(data)
+    return jsonify(success=True)
+    # try:
+    #     # store this data (also add status = open) in appointments collection and get appointment id
+    #     data['status'] = "open"
+    #     data['appointment_id'] = data['patient_id'] + "_"+data['doctor_id']+"_"+data['datetime']
+    #     db.collection("appointments").document(
+    #         data['appointment_id']).set(data, merge=True)
 
-        # open patients collection, add this appointment id to appointments array []
-        patient_ref = db.collection("patient").document(data['patient_id'])
-        patient_ref.update(
-            {u'appointments': firestore.ArrayUnion([data['appointment_id']])})
+    #     # open patients collection, add this appointment id to appointments array []
+    #     patient_ref = db.collection("patient").document(data['patient_id'])
+    #     patient_ref.update(
+    #         {u'appointments': firestore.ArrayUnion([data['appointment_id']])})
 
-        # open doctors collection, add this appointment id to appointments array []
-        doctor_ref = db.collection("doctor").document(data['doctor_id'])
-        doctor_ref.update(
-            {u'appointments': firestore.ArrayUnion([data['appointment_id']])})
+    #     # open doctors collection, add this appointment id to appointments array []
+    #     doctor_ref = db.collection("doctor").document(data['doctor_id'])
+    #     doctor_ref.update(
+    #         {u'appointments': firestore.ArrayUnion([data['appointment_id']])})
 
-        return jsonify(success=True)
-    except:
-        return jsonify(success=False)
+    #     return jsonify(success=True)
+    # except:
+    #     return jsonify(success=False)
 
 
 '''

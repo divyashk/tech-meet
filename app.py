@@ -7,10 +7,10 @@ import time
 import math 
 import datetime
 import json
+import requests
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-import os
 from dotenv import load_dotenv
 import threading
 from passlib.hash import sha256_crypt
@@ -25,10 +25,10 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
-appointments_ms = "127.0.0.1:5001"
-authentication_ms = "127.0.0.1:5002"
-# infra_ms = "127.0.0.1:5003"
-inventory_ms = "127.0.0.1:5004"
+appointments_ms = "http://127.0.0.1:5001"
+authentication_ms = "http://127.0.0.1:5002"
+# infra_ms = "http://127.0.0.1:5003"
+inventory_ms = "http://127.0.0.1:5004"
 
 """
 Functions
@@ -332,15 +332,17 @@ def dashboard_route():
     return render_template('hospital_dashboard.html', hospital_data = hospital_data)
 
 
-"""Testing APIs in Microservices"""
-import requests
+# """Testing APIs in Microservices : How to make api calls"""
 
-url = 'https://www.w3schools.com/python/demopage.php'
-myobj = {'somekey': 'somevalue'}
-
-x = requests.post(url, data = myobj)
-
-print(x.text)
+# url = appointments_ms + "/book_appointment"
+# data = {
+#     "patient_id" : "random_patient_id",
+#     "doctor_id" : "random_doctor_id",
+#     "datetime" : "some datetime format",
+#     "description" : "details about disease"
+# }
+# x = requests.post(url, json = data)
+# print(x.text)
 
 """
 Main 
