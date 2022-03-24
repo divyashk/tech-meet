@@ -1,3 +1,4 @@
+# from asyncio.windows_events import NULL
 from flask import Flask, json, render_template, jsonify, request, session, flash, redirect, url_for, send_file
 import firebase_admin
 from firebase_admin import credentials
@@ -82,6 +83,24 @@ def get_all_hospital_meds(hosp_id):
         disp_id=db.collection('hospital').document(hosp_id).get().to_dict()['dispensary'][0]
         allMedsData=db.collection('dispensary').document(disp_id).get().to_dict()
         return jsonify(success=True,allMedsData=allMedsData)
+    except:
+        return jsonify(success=False)
+
+@app.route('/doctor/<doctor_id>', methods=['GET'])#POST
+def get_doctor_slots(doctor_id):
+    try:
+        doctor_details=db.collection('doctor').document(doctor_id).get().to_dict()
+        slots={}
+        try:
+            refs = db.collection('doctor').document(doctor_id).collection('slots').stream()
+            for ref in refs:
+                slots[ref.id]=ref.to_dict()
+        except:
+            refs={}
+        
+        allDoctorData={"doctor_details":doctor_details,"slots":slots}
+        print(allDoctorData)
+        return jsonify(success=True,allDoctorData=allDoctorData)
     except:
         return jsonify(success=False)
 
