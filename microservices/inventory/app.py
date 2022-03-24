@@ -87,9 +87,12 @@ def get_all_hospital_meds(hosp_id):
 
 @app.route('/medicines' , methods = ['GET'])
 def get_all_meds():
-    allMedsData = db.collection('medicine')
+    refs = db.collection('medicine').stream()
+    allMedsData = {}
+    for ref in refs:
+        allMedsData[ref.id] = ref.to_dict()
+    return allMedsData
 
-    return jsonify(success=True, allMedsData=allMedsData)
 # Main
 if __name__ == '__main__':
     app.run(debug=True , port = 5004)

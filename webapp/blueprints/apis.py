@@ -124,7 +124,6 @@ def get_all(hosp_id):
 
 @blueprint.route("/inventory/medicines", methods=['GET'])
 def medicines():
-  data = request.json
   url = inventory_ms + '/medicines'
-  x = requests.post(url, json = data)
+  x = requests.get(url)
   return x.json()
