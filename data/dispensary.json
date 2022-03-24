@@ -1,0 +1,97 @@
+{
+    "dispId1": {
+        "meds": [
+            {
+                "medId": "medicineId1",
+                "price": 100,
+                "quantity": 4
+            },
+            {
+                "medId": "medicineId2",
+                "price": 100,
+                "quantity": 4
+            }
+        ],
+        "name": "Dispensary 1"
+    },
+    "dispId2": {
+        "meds": [
+            {
+                "medId": "medicineId3",
+                "price": 10,
+                "quantity": 4
+            },
+            {
+                "medId": "medicineId2",
+                "price": 100,
+                "quantity": 4
+            }
+        ],
+        "name": "Dispensary 2"
+    },
+    "dispId3": {
+        "meds": [
+            {
+                "medId": "medicineId6",
+                "price": 100,
+                "quantity": 4
+            },
+            {
+                "medId": "medicineId7",
+                "price": 100,
+                "quantity": 4
+            }
+        ],
+        "name": "Dispensary 3"
+    },
+    "dispId4": {
+        "meds": [
+            {
+                "medId": "medicineId5",
+                "price": 100,
+                "quantity": 4
+            },
+            {
+                "medId": "medicineId6",
+                "price": 100,
+                "quantity": 4
+            }
+        ],
+        "name": "Dispensary 4"
+    },
+    "dispId5": {
+        "meds": [
+            {
+                "medId": "medicineId2",
+                "price": 100,
+                "quantity": 4
+            },
+            {
+                "medId": "medicineId8",
+                "price": 100,
+                "quantity": 4
+            }
+        ],
+        "name": "Dispensary 1"
+    },
+    "dispId6": {
+        "meds": [
+            {
+                "medId": "medicineId5",
+                "price": 100,
+                "quantity": 4
+            },
+            {
+                "medId": "medicineId7",
+                "price": 100,
+                "quantity": 4
+            },
+            {
+                "medId": "medicineId8",
+                "price": 100,
+                "quantity": 4
+            }
+        ],
+        "name": "Dispensary 1"
+    }
+}
