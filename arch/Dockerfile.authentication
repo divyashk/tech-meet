@@ -1,0 +1,9 @@
+FROM python:3.8-slim-buster
+# Install dependencies:
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+EXPOSE 5000
+COPY authentication.py .
+COPY creds.json .
+# Run the application:
+CMD python authentication.py

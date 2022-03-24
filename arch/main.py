@@ -18,21 +18,11 @@ db = firestore.client()
 app = Flask(__name__)
 app.register_blueprint(blueprint)
 app.secret_key = os.getenv('SECRET_KEY')
-appointments_ms = "http://127.0.0.1:5001"
-authentication_ms = "http://127.0.0.1:5002"
-# infra_ms = "http://127.0.0.1:5003"
-inventory_ms = "http://127.0.0.1:5004"
+
 
 """
 Functions
 """
-def role_string(role):
-    if role == 0:
-        return 'patient'
-    if role == 1:
-        return 'doctor'
-    return 'hospital'
-
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -123,6 +113,64 @@ def if_logged_in():
         return jsonify(success=False)
 
 
+@app.route('/username_exists', methods=['POST'])
+def check_if_username_exists():
+    # needs username and check if the username exists or not
+    # returns true and false depending on if it exists
+    # also pass type in the parameters now
+
+    req_data = request.json
+
+    print("Check if username exists")
+
+    if is_user_id_valid(req_data["username"]):
+        userid_ref = db.collection("users").document(
+            req_data['username']).get()
+
+        if userid_ref.exists:
+            print("username exists")
+            if "image" in userid_ref.to_dict():
+                return jsonify(success=True , image=userid_ref.to_dict()["image"])
+            else:
+                return jsonify(success=True, image="")
+        else:
+            print("username doesn't exists")
+            return jsonify(success=False, err_code='1')
+
+    else:
+        return jsonify(success=False, err_code='0')
+
+
+@app.route('/login', methods=['POST'])
+def login_register():
+    '''
+    The main login page which functions using the apis and all
+    '''
+    if "logged_in" in session and session["logged_in"]:
+        return redirect(url_for("profile"))
+
+    data = request.json
+    fire_req_data = db.collection('users').document(
+        data["username"]).get().to_dict()
+    pass_hash = fire_req_data['password']
+
+    if sha256_crypt.verify(data["password"], pass_hash):
+        print("Password match successfully, login the user")
+
+        if data["username"] == "root":
+            # This is a superuser!!
+            session['is_super_user'] = True
+            session['super_user_secret'] = "admin@ppd"
+
+        session['logged_in'] = True
+        session['username'] = data['username']
+        session['role'] = data['role']
+        return jsonify(success=True)
+    else:
+        print("Password does not match")
+        return jsonify(success=False, err="Password does not match")
+
+
 """
 Routes
 """
@@ -137,16 +185,16 @@ def home():
     if ("username" in session):
         username = session["username"]
         role = session["role"]
-        return render_template(role_string(role) + '/dashboard.html', username=username)
+        return render_template(role + '/dashboard.html', username=username)
     else:
-        return render_template('login.html', username=username)
+        return render_template('index.html', username=username)
 
 
 @app.route('/me')
 @is_logged_in
 def get_me():
     role = session['role']
-    return render_template(role_string(role) + '/profile.html', isMe=True)
+    return render_template(role + '/profile.html', isMe=True)
 
 
 @app.route('/login')
@@ -160,11 +208,6 @@ def login():
 def get_doctor_profile(id):
     # Returns the doctor profile page
     return render_template('doctor/profile.html')
-
-
-@app.route('/doctor/diagnosis')
-def diagnosys():
-    return render_template("doctor/diagnos.html")
 
 @app.route('/hospital/<id>')
 def get_hospital_profile():
@@ -201,8 +244,6 @@ def get_all_doctors(id):
             "phone_no": "9811417932"
         }
     ]
-
-    #TODO VINAYAK used in hospital home page
 
     return jsonify(success=True, allDoctorsData=allDoctorsData)
 
@@ -242,17 +283,12 @@ def profile_others(id):
 
     return render_template("profile.html", username = id, isMe="no", loginuser=username)
 
-@app.route('/book')
-def book_appointment():
-    return render_template('find.html')
 
 @app.route('/logout')
 def logout():
     session["logged_in"] = False
     session.clear()
     return redirect(url_for('home'))
-
-
 
 
 
@@ -304,4 +340,4 @@ def dashboard_route():
 Main 
 """
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port = 5000)
