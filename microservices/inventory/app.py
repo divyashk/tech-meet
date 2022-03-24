@@ -85,7 +85,7 @@ def get_all_meds(hosp_id):
     except:
         return jsonify(success=False)
 
-@app.route('/medicines')
+@app.route('/medicines' , methods = ['GET'])
 def get_all_meds():
     allMedsData = db.collection('medicine')
 
