@@ -58,7 +58,7 @@
         margin: 2px 0;
     }
 
-      /* Style tab links */
+    /* Style tab links */
     .tablink {
         color: white;
         float: left;
@@ -83,7 +83,6 @@
         padding: 32px 20px;
         height: 100%;
     }
-
 </style>
 <link rel="stylesheet" href="/static/frontend/css/comments.css">
 
@@ -123,7 +122,7 @@
             </div>
         </div>
 
-        
+
         <a id="close" class="waves-effect waves-light btn">Add Prescription</a>
 
         <br><br>
@@ -162,13 +161,16 @@
     <div id="modal1" class="modal">
         <div class='wrapper-tab-btn-link'>
             <ul style="display: inline-flex;">
-                    <li><button class="tablink" onclick="openPage('reviews-tab', this)" id="defaultOpen">Comments</button></li>
-                    <li><button class="tablink" id="leads-tab" onclick="openPage('upvotes-tab', this)"> Upvotes </button></li>
-                    <li><button class="tablink" id="leads-tab" onclick="openPage('image-reviews-tab', this)"> Image Reviews </button></li>
+                <li><button class="tablink" onclick="openPage('reviews-tab', this)" id="defaultOpen">Comments</button>
+                </li>
+                <li><button class="tablink" id="leads-tab" onclick="openPage('upvotes-tab', this)"> Upvotes </button>
+                </li>
+                <li><button class="tablink" id="leads-tab" onclick="openPage('image-reviews-tab', this)"> Image Reviews
+                    </button></li>
             </ul>
         </div>
         <div id="reviews-tab" class="tabcontent">
-            
+
 
             <div class="modal-content">
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">
@@ -176,19 +178,19 @@
                 </a>
             </div>
 
-        
+
             <div id="live-chat">
                 <div class="chat">
                     <div id="post-comments" class="chat-history">
-                    
-                    </div> 
+
+                    </div>
                 </div>
             </div>
-        
+
             <div id="comment-load" class="progress" style="margin: 0.5rem; display: none;">
                 <div class="indeterminate"></div>
             </div>
-            
+
             {% if(username) %}
             <form onsubmit="handleSendComment(event)" class="modal-footer">
                 <div class="input-field inline">
@@ -200,7 +202,7 @@
                 </button>
             </form>
             {% endif %}
-        
+
         </div>
 
         <div id="upvotes-tab" class="tabcontent">
@@ -214,20 +216,20 @@
                     <h4>Upvoted by</h4>
                     <div style="overflow-y: scroll; height:100%">
                         <ul class="widget-list" id="upvoters">
-                        <li>
-                            <a class="widget-list-link">
-                            <img src="http://www.gravatar.com/avatar/47?f=y&amp;s=64&amp;d=identicon">
-                            Manager #1 <span>481 followers</span>
-                            </a>
-                        </li>
-                    </ul>
+                            <li>
+                                <a class="widget-list-link">
+                                    <img src="http://www.gravatar.com/avatar/47?f=y&amp;s=64&amp;d=identicon">
+                                    Manager #1 <span>481 followers</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="votes-tab-names">
                     <h4>Downvoted by</h4>
                     <div style="overflow-y: scroll; height:100%">
-                    <ul class="widget-list" id="downvoters">
-                    </ul>
+                        <ul class="widget-list" id="downvoters">
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -239,19 +241,19 @@
                     <span class="material-icons">close</span>
                 </a>
             </div>
-            <div class="image-reviews-slideshow" id = "review-images">
+            <div class="image-reviews-slideshow" id="review-images">
                 <!-- Write code for image reviews image-reviews-slideshow -->
             </div>
-            
+
             {% if(username) %}
             <form onsubmit="handleImageUpload(event)" class="modal-footer">
                 <div class="input-field inline">
                     <div class="btn" style="margin-right: 12%;">
                         <span>Upload Review Image</span>
-                        <input id = "upload-review-image" type="file" accept="image/*">
+                        <input id="upload-review-image" type="file" accept="image/*">
                     </div>
                     <div class="file-path-wrapper">
-                        <input id = "pp-input" class="file-path validate" type="text">
+                        <input id="pp-input" class="file-path validate" type="text">
                     </div>
                 </div>
                 <button type="submit" class="submit waves-effect waves-green btn-flat">
@@ -261,7 +263,7 @@
             {% endif %}
         </div>
 
-        
+
     </div>
 
 </div> <!-- End of main -->
@@ -275,13 +277,11 @@
 
     // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
-    document.getElementById("close").onclick= function() {myFunction()};
-    function myFunction() 
-    
-    {
-  document.getElementById("close").innerHTML = "YOU CLICKED ME!";
+    document.getElementById("close").onclick = function () { myFunction() };
+    function myFunction() {
+        document.getElementById("close").innerHTML = "YOU CLICKED ME!";
 
-}
+    }
 
     function openPage(pageName, elmnt) {
         console.log("Open page callsed");
@@ -290,13 +290,13 @@
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
+            tabcontent[i].style.display = "none";
         }
 
         // Remove the background color of all tablinks/buttons
         tablinks = document.getElementsByClassName("tablink");
         for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].style.backgroundColor = "";
+            tablinks[i].style.backgroundColor = "";
         }
 
         // Show the specific tab content
@@ -307,19 +307,19 @@
     }
 
 
-    $('#live-chat header').on('click', function() {
+    $('#live-chat header').on('click', function () {
 
-		$('.chat').slideToggle(300, 'swing');
-		$('.chat-message-counter').fadeToggle(300, 'swing');
+        $('.chat').slideToggle(300, 'swing');
+        $('.chat-message-counter').fadeToggle(300, 'swing');
 
-	});
+    });
 
-	$('.chat-close').on('click', function(e) {
+    $('.chat-close').on('click', function (e) {
 
-		e.preventDefault();
-		$('#live-chat').fadeOut(300);
+        e.preventDefault();
+        $('#live-chat').fadeOut(300);
 
-	});
+    });
 
     const username = "{{ username }}";
     var leadsData = [];
@@ -328,10 +328,7 @@
     var globalItem = "";
     var leadSelected = "";
 
-    window.firebaseCommentsListener = "";
-
     const byId = (id) => { return document.getElementById(id); }
-    const db = firebase.firestore();
 
     function showAnimation() {
         $("#loading-anim").css("display", "block");
@@ -342,6 +339,21 @@
         $("#loading-anim").css("display", "none");
         $("#find-btn").css("display", "block");
     }
+
+    fetch('/inventory/medicines').then(res => res.json()).then(data => {
+        console.log("Medicines data ", data);
+
+        var optionsToAdd = "<option value=\"\" disabled selected>Choose Medicine</option>";
+
+        // querySnapshot.forEach((doc) => {
+        //     // console.log(doc.id, " => ", doc.data());
+        //     optionsToAdd += "<option value=\"" + doc.id + "\"> " + doc.id + " </option>"
+        // });
+
+        // Now update the options
+        $("#autocomplete-input-city").html(optionsToAdd);
+        $("#autocomplete-input-city").trigger('contentChanged');
+    });
 
     $(document).ready(function () {
         $('#autocomplete-input-city').autocomplete({
@@ -376,170 +388,7 @@
 
             var instance = M.Modal.getInstance(document.getElementById("modal1"));
             instance.open();
-
-            // Do remember to close this one once you are done
-            window.firebaseCommentsListener = firebase.firestore().collection("Inventory").doc(leadsData[index].item)
-                .collection(leadsData[index].state).doc(leadsData[index].city)
-                .collection("leads").doc(leadSelected).onSnapshot(doc => {
-                    console.log("updatation", doc.data());
-
-                    var toAdd = "";
-                    
-                    if (doc.data().comments) {
-                        doc.data().comments.forEach((comment, index) => {
-                            toAdd += 
-                            `<div class="chat-message clearfix">
-					
-                                <img src="http://lorempixum.com/32/32/people" alt="" width="32" height="32">
-
-                                <div class="chat-message-content clearfix">
-                                    
-                                    <span class="chat-time">`+  "13:55" + `</span>
-
-                                    <h5 class='chat-poster' > ` + comment.poster + `</h5>
-
-                                    <p class='chat-comment' >` + comment.comment + `</p>
-
-                                </div> <!-- end chat-message-content -->
-
-                            </div> <!-- end chat-message -->
-
-                            <hr>
-                        `;
-                        })
-                    } else {
-                        toAdd += "No reviews yet!";
-                    }
-                    $("#post-comments").html(toAdd);
-
-                    data = {
-                        leadId : leadSelected
-                    }
-                    var payload = {
-                        method: 'POST', // or 'PUT'
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data),
-                    }
-                    upvotestring = "";
-                    downvotestring = "";
-                    imagestring = "";
-                    fetch('/get_votes', payload)
-                        .then(res => res.json())
-                        .then(res => {
-                            for(var arr of res.upvoters){
-                                console.log(arr[0] , arr[1])
-                                upvotestring += 
-                                `<li>
-                                    <a class="widget-list-link" href="` + arr[0] + `">
-                                    <img src="http://www.gravatar.com/avatar/47?f=y&amp;s=64&amp;d=identicon">`+
-                                    arr[0] + `<span> Rating : ` + arr[1] + `</span>
-                                    </a>
-                                </li>`
-                            }
-                            for(var arr of res.downvoters){
-                                console.log(arr[0] , arr[1])
-                                downvotestring += 
-                                `<li>
-                                    <a class="widget-list-link" href="` + arr[0] + `">
-                                    <img src="http://www.gravatar.com/avatar/47?f=y&amp;s=64&amp;d=identicon">`+
-                                    arr[0] + `<span> Rating : ` + arr[1] + `</span>
-                                    </a>
-                                </li>`
-                            }
-                            console.log("Upvote : " , upvotestring);
-                            console.log(downvotestring);
-                            $("#upvoters").html(upvotestring);
-                            $("#downvoters").html(downvotestring);
-                            
-                            for(var img of res.urls){
-                                imagestring += `<img style="width:200px; margin:auto;" src="` + img + `">`;
-                            }
-                            $("#review-images").html(imagestring);
-                        });
-                });
-
-
         }
-
-        handleSendComment = (e) => {
-            // Find the leadId from the global selected lead id
-            e.preventDefault();
-
-            console.log("submit button called", e);
-            $("#comment-load").css("display", "block");
-
-            // Make API Request 
-            const comment = $("#comment_inline").val();
-
-            data = {
-                leadId: leadSelected,
-                comment: comment,
-            }
-
-            var payload = {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            }
-
-            fetch('/add_comment', payload)
-                .then(res => res.json())
-                .then(res => {
-                    console.log('Get leads success', res);
-                    if (res['success']) {
-                        console.log("successful request");
-                        $("#comment_inline").val("");
-                    }
-                })
-                .catch(err => {
-                    console.log("Error in get_leads_api", err);
-                }).finally(() => {
-                    $("#comment-load").css("display", "none");
-                });
-
-            console.log("Submitted!");
-
-        }
-
-        function addImage(url , leadSelected){
-            console.log(url);
-            // Send POST request with url and leadSelected
-            data = {
-                url : url,
-                leadId : leadSelected,
-            }
-            var payload = {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            }
-
-            fetch('/imageReviewUpload', payload)
-                .then(res => res.json())
-                .then(res => {
-                    console.log(res);
-                });
-        }
-
-        handleImageUpload = (e) => {
-            // console.log(leadSelected);
-            e.preventDefault();
-            const ref = firebase.storage().ref();
-            const file = document.querySelector('#upload-review-image').files[0];
-            const name = (+new Date()) + '-' + file.name;
-            const metadata = { contentType: file.type };
-            const task = ref.child(name).put(file, metadata);
-            task.then(snapshot => snapshot.ref.getDownloadURL())
-                .then(url => {addImage(url , leadSelected)})
-            console.log("submit button called", e);
-        }
-
 
         $("#autocomplete-input-item").on('change', function () {
             const itemSelected = $(this).val();
@@ -618,245 +467,7 @@
                 });
 
         });
-
-
-        // FEtch the hospitals from the backend
-        fetch('/hospital/all')
-        .then(res => res.json())
-        .then(data => {
-            console.log("DATA fetched", data);
-
-            var optionsToAdd = "";
-
-            data.hospitals_data.forEach((doc) => {
-                // console.log(doc.id, " => ", doc.data());
-                optionsToAdd += "<option value=\"" + doc.username + "\"> " + doc.hospital_name + " </option>"
-            });
-
-            // Now update the options
-            $("#autocomplete-input-item").append(optionsToAdd);
-            $("#autocomplete-input-item").trigger('contentChanged');
-            })
-            .catch((err) => {
-                console.log("Error came while fetching data", err);
-            });
-
     });
-
-    handleVote = (leadIndex, toSet) => {
-        if (username) {
-            // User exist, so can proceed with calling the api
-            console.log("handle vote", leadIndex, toSet);
-
-            if (leadsData[leadIndex].cur_status == toSet) {
-                toSet = 0; // un vote button
-            }
-
-            data = {
-                cur_status: leadsData[leadIndex].cur_status,
-                change_to: toSet,
-                net_upvotes: leadsData[leadIndex].net_upvotes,
-                leadId: leadsData[leadIndex].leadId,
-                item: globalItem,
-                state: globalState,
-                city: globalCity,
-            }
-
-            console.log("vote data", data);
-
-            // Write logic for locally faster
-            const leadId = leadsData[leadIndex].leadId;
-
-            // First update the votes
-            const leadEle = $("#lead" + leadId);
-            leadEle.find(".up-vote-count").html(data.net_upvotes + data.change_to - data.cur_status);
-
-            // Now updating the icon colors
-            leadEle.find(".upvote").removeClass("color-green");
-            leadEle.find(".downvote").removeClass("color-red");
-
-            if (data.change_to == 1) {
-                leadEle.find(".upvote").addClass("color-green");
-            } else if (data.change_to == -1) {
-                leadEle.find(".downvote").addClass("color-red");
-            }
-
-
-            // Updating server side
-            var payload = {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            }
-
-            fetch('/vote_api', payload)
-                .then(res => res.json())
-                .then(res => {
-                    console.log('Get leads success', res);
-                    if (res['success']) {
-                        console.log("successful request")
-                    }
-                })
-                .catch(err => {
-                    console.log("Error in vote_api", err);
-                });
-
-            console.log("Submitted!");
-
-
-            // UI update will be done automatically by the snapshot listener
-
-
-        } else {
-            location.href = "/login";
-        }
-    }
-
-    // After clicking the find button
-    $("#find-btn").on("click", (e) => {
-        console.log("Find button clicked", e);
-
-        // Find the data from the UI
-        data = {
-            item: byId("autocomplete-input-item").value,
-            state: byId("autocomplete-input-state").value,
-            city: byId("autocomplete-input-city").value,
-        }
-
-        // Do comment these lines
-        // data = {
-        //     item: 'oxygen cylinder',
-        //     state: 'uttar pradesh',
-        //     city: 'ghaziabad',
-        // }
-
-        if (!data.item) {
-            alert("Please select Item name");
-            return;
-        }
-
-        if (!data.state) {
-            alert("Please select Item state");
-            return;
-        }
-
-        if (!data.city) {
-            alert("Please select Item city");
-            return;
-        }
-
-
-        globalCity = data.city;
-        globalItem = data.item;
-        globalState = data.state;
-
-        showAnimation();
-
-        const ldRef = db.collection("Inventory").doc(data.item).collection(data.state).doc(data.city).collection("leads");
-
-        ldRef.onSnapshot((querySnapshot) => {
-            var leads = [];
-            querySnapshot.forEach((doc) => {
-                var dic = doc.data();
-
-                print("dic", dic);
-
-                dic["leadId"] = doc.id;
-                leads.push(dic);
-            });
-
-            // Comparotor function
-            leads.sort((a, b) => {
-                if (a.weight > b.weight) return -1;
-                if (a.weight < b.weight) return 1;
-                return 0;
-            });
-
-            $("#leads-show").html("");
-            console.log("LEads are", leads);
-            leadsData = leads;
-
-            let toAdd = "";
-            leads.forEach((val, index) => {
-
-                var upVoteClass = "";
-                var downVoteClass = "";
-
-                if (username) {
-                    console.log("username found", username);
-
-                    var myVote = val.votes[username];
-                    if (myVote && myVote == 1) {
-                        upVoteClass = "color-green";
-                        leadsData[index].cur_status = 1;
-                    } else if (myVote && myVote == -1) {
-                        leadsData[index].cur_status = -1;
-                        downVoteClass = "color-red";
-                    } else {
-                        leadsData[index].cur_status = 0;
-                    }
-                }
-
-                toAdd += `
-                    <div class="col s12 m6" id="lead` + val.leadId + `">
-                        <div class="card horizontal">                      
-                            <div class="card-stacked">
-                                <div class="card-content">
-                                    <div class="card-head" onclick="openModal(` + index + `, event)"> ` + val.item + " x " + val.quantity + ` </div>
-                                    <a class="profile-link" href="/profile/` + val.username + `">` + val.name + `</a>
-                                    <div class="address" style="margin-top: 12px">
-                                        <a target="_none" rel="noopener" href="https://www.google.com/maps/search/` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + `">` + (Boolean(val.address) ? (val.address + `, `) : "") + val.city + `, ` + val.state + ` <span class="material-icons my-loc-icon">location_on</span> ` + `</a>
-                                    </div>
-                                </div>
-                                <div class="card-action">
-                                    <div>
-                                    <i class="material-icons prefix" style="vertical-align: middle;">phone</i>
-                                    <a href= tel:` + val.contact + `>` + val.contact + `</a>
-                                    </div>
-                                    <div style="margin-left: auto; cursor: pointer;" onclick="openModal(` + index + `, event)">
-                                        ` + (Boolean(val.comments) ? (val.comments.length) : 0) + `
-                                        <span class="material-icons" style="vertical-align: middle">comment</span>
-                                        <span class="material-icons" style="vertical-align: middle; margin-bottom:7px;">add_a_photo</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="right-row">
-                                <div class="upvote ` + upVoteClass + `" onclick="handleVote(` + index + `, 1) ">
-                                    <span class="material-icons">
-                                        expand_less
-                                    </span>
-                                </div>
-
-                                <div class="up-vote-count">
-                                    ` + val.net_upvotes + `
-                                 </div>
-
-                                <div class="downvote ` + downVoteClass + `" onclick="handleVote(` + index + `, -1)">
-                                    <span class="material-icons">
-                                        expand_more
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    `;
-
-            });
-
-            $("#leads-show").append(toAdd);
-
-
-
-            hideAnimation();
-            $("#find_loc").css("display", "none");
-            $("#leads-container").css("display", "block");
-        });
-
-        console.log("Submitted!");
-    });
-
 
 </script>
 

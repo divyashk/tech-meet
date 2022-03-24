@@ -64,7 +64,7 @@ def allocate_room():
 
 
 @app.route('/free_room', methods=['POST'])
-def get_room_info():
+def free_room():
     data = request.json
     # free a particular room
     room = db.collection('hospital').document(
@@ -76,4 +76,4 @@ def get_room_info():
 
 # Main
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5003)

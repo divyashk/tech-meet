@@ -18,10 +18,6 @@ db = firestore.client()
 app = Flask(__name__)
 app.register_blueprint(blueprint)
 app.secret_key = os.getenv('SECRET_KEY')
-appointments_ms = "http://127.0.0.1:5001"
-authentication_ms = "http://127.0.0.1:5002"
-# infra_ms = "http://127.0.0.1:5003"
-inventory_ms = "http://127.0.0.1:5004"
 
 """
 Functions
@@ -52,9 +48,6 @@ def is_user_id_valid(uid):
         return False
 
     return True
-
-def weight(i):
-    return 5*max(1 , math.log2(i/3600))
 
 """
 APIs
@@ -162,9 +155,11 @@ def get_doctor_profile(id):
     return render_template('doctor/profile.html')
 
 
-@app.route('/doctor/diagnosis')
-def diagnosys():
-    return render_template("doctor/diagnos.html")
+@app.route('/appointment/<id>')
+def doctor_id(id):
+    appointment_data = db.collection('appointment').document(id).get().to_dict()
+    print("Diagnos appointment data", appointment_data)
+    return render_template("doctor/diagnos.html", appointment_data=appointment_data)
 
 @app.route('/hospital/<id>')
 def get_hospital_profile():
@@ -192,17 +187,16 @@ def get_all_meds(id):
 
 @app.route('/hospital/<id>/doctors')
 def get_all_doctors(id):
-    allDoctorsData = [
-        {
-            "username": "doc_username1",
-            "doctor_name": "doc NAme",
-            "degree": "Desgree",
-            "medical_profession": "Helo",
-            "phone_no": "9811417932"
-        }
-    ]
-
-    #TODO VINAYAK used in hospital home page
+    # allDoctorsData = [
+    #     {
+    #         "username": "doc_username1",
+    #         "doctor_name": "doc NAme",
+    #         "degree": "Desgree",
+    #         "medical_profession": "Helo",
+    #         "phone_no": "9811417932"
+    #     }
+    # ]
+    allDoctorsData=db.collection('hospital').document(id).get().to_dict()['doctors_username']
 
     return jsonify(success=True, allDoctorsData=allDoctorsData)
 
@@ -220,7 +214,6 @@ def get_all_beds(id):
             "patient_id": "value"
         }
     ]
-
     return jsonify(success=True, allBedsData=allBedsData)
 
 
@@ -229,54 +222,59 @@ def get_all_beds(id):
 def profile():
     if session['username']:
         username= session['username']
-
     return render_template("profile.html", username = username, isMe="yes", loginuser=username)
 
 @app.route('/profile/<id>')
 def profile_others(id):
     print("for id", id)
-
     username = ""
     if 'username' in session:
         username = session['username']
-
     return render_template("profile.html", username = id, isMe="no", loginuser=username)
 
 @app.route('/book')
 def book_appointment():
-    return render_template('find.html')
+    return render_template('patient/book.html')
+
+@app.route('/hospital/all')
+def get_all_hospitals():
+    docs = db.collection('hospital').stream()
+
+    hospital_data = []
+    for doc in docs:
+        print(f'{doc.id} => {doc.to_dict()}')
+        hospital_data.append({
+            "username": doc.to_dict()["username"],
+            "hospital_name": doc.to_dict()["hospital_name"],
+            "doctors_username": doc.to_dict()["doctors_username"]
+        })
+    
+    return jsonify(success=True, hospitals_data=hospital_data)
+
+
+
+'''@app.route('/hospital/<id>/doctordata')
+def get_all_doctors(id):
+    # TODO VINAYAK
+
+    doctors_data = [
+        {
+            "doctor_name":"Dr. ABC",
+            "username":"abc123",
+            "degree":"MBBS, MD"
+        }
+
+    ]
+
+    return jsonify(success=True, doctor_data=doctors_data)
+'''
+
 
 @app.route('/logout')
 def logout():
     session["logged_in"] = False
     session.clear()
     return redirect(url_for('home'))
-
-
-
-
-
-
-
-"""
-Test routes
-"""
-
-# @app.route('/testfind')
-# def testfind():
-#     return render_template('testfind.html')
-
-# @app.route('/testvote')
-# def testvote():
-#     return render_template('testvote.html')
-
-# @app.route('/testdelete')
-# def testdelete():
-#     return render_template('testdelete.html')
-
-# @app.route('/testcomment')
-# def testcomment():
-#     return render_template('testcomment.html')
 
 @app.route('/dashboard')
 def dashboard_route():
@@ -287,21 +285,8 @@ def dashboard_route():
 
     return render_template('hospital_dashboard.html', hospital_data = hospital_data)
 
-
-# """Testing APIs in Microservices : How to make api calls"""
-
-# url = appointments_ms + "/book_appointment"
-# data = {
-#     "patient_id" : "random_patient_id",
-#     "doctor_id" : "random_doctor_id",
-#     "datetime" : "some datetime format",
-#     "description" : "details about disease"
-# }
-# x = requests.post(url, json = data)
-# print(x.text)
-
 """
 Main 
 """
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='127.0.0.1', port=5000)

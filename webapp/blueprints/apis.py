@@ -1,5 +1,5 @@
 from . import blueprint
-from flask import request, session
+from flask import request, session , jsonify
 import requests
 
 appointments_ms = "http://127.0.0.1:5001"
@@ -20,6 +20,8 @@ def book_appointment():
 def show_appointment():
   data = request.json
   url = appointments_ms + '/show_appointments'
+  print(data)
+  print(url)
   x = requests.post(url, json = data)
   return x.json()
 
@@ -56,8 +58,14 @@ def login():
   data = request.json
   url = authentication_ms + '/login'
   x = requests.post(url, json = data)
-  session.update(x.json()['session'])
-  return x.json()
+  res = x.json()
+  if(res['success']):
+    session['logged_in'] = True
+    session['username'] = data['username']
+    session['role'] = res['role']
+    return jsonify(success=True)
+  else:
+    return jsonify(success=False)
 
 
 """ Infrastructure Microservice APIs """
@@ -112,4 +120,17 @@ def get_all(hosp_id):
   data = request.json
   url = inventory_ms + '/hospital/' + hosp_id + "/getall"
   x = requests.post(url, json = data)
+  return x.json()
+
+@blueprint.route("/inventory/medicines", methods=['GET'])
+def medicines():
+  url = inventory_ms + '/medicines'
+  x = requests.get(url)
+  return x.json()
+
+@blueprint.route('/hospital/<hosp_id>/getall', methods=['POST'])
+def hospital_getall(hosp_id):
+  data = request.json
+  url = inventory_ms + '/hospital/' + hosp_id + '/getall'
+  x = requests.post(url , json = data)
   return x.json()
