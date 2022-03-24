@@ -12,7 +12,7 @@
 <div class="main-profile">
   <div class="asked">
 
-    DASHBOARD
+    <div class="center"> Doctor Dashboard </div>
 
     <div class="asked_footer">
       <ul>
@@ -23,30 +23,17 @@
     </div>
 
     <div>
-
-      <div id="Home" class="tabcontent">
-        <div class="profile-content row">
-          <div class="profile-left col s6">
-            <div class="asked_profile">
-              <div class="asked_profile-content">
-                <img src="" id="pp" style="width:100%">
-                <h3 id="show-name-here" style="margin-bottom: 4px;"></h3>
-                <div class="rating"></div>
-              </div>
-            </div>
-            <p id="show-phone-here"> <i class="material-icons prefix" style="vertical-align: middle;">phone</i></p>
-          </div>
-          <div class="profile-right col s6">
-            <div id="rat-inp-con">
-              Ratings given by me
-              <div class="rating-input"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="doctor" id="Appointments">
         <!-- Cards will be added here by javascript -->
+
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
+
+        <div id="open_appointments"></div>
+
+        <div id="closed_appointments"></div>
+
       </div>
     </div>
 
@@ -96,7 +83,6 @@
     elmnt.style.backgroundColor = "#26a69a";
   }
 
-  const db = firebase.firestore();
   const username = "{{username}}";
   const isMe = "{{ isMe }}";
   const loginuser = "{{ loginuser }}";
@@ -119,12 +105,12 @@
     .then(data => {
       console.log("all appointments data", data);
       const showappointments = data.open_appointments;
-      console.log(showappointments)
-      let showappointmentsHTML = "";
+      console.log(showappointments);
+      let showappointmentsHTML = `<div id="open_appointments"> <h5> Open Appointments </h3>`;
 
       for (let i = 0; i < showappointments.length; i++) {
         showappointmentsHTML += `
-    <div class="card horizontal">                      
+    <a href="/appointment/appointmentId1" class="card horizontal">                      
             <div class="card-stacked">
                 <div class="card-content">
                     <div class="card-head"> ${data.open_appointments[i].desc} </div>
@@ -140,19 +126,45 @@
                 </div>
             </div>
          
-        </div>
+        </a>
     `;
       }
 
+      showappointmentsHTML += `</div> <div id="closed_appointments"> <h5> Past Appointments </h5>`;
+
+      for (let i = 0; i < data.closed_appointments.length; i++) {
+        showappointmentsHTML += `
+    <a href="/appointment/appointmentId1" class="card horizontal">                      
+            <div class="card-stacked">
+                <div class="card-content">
+                    <div class="card-head"> ${data.closed_appointments[i].desc} </div>
+                    
+                    <div class="address" style="margin-top: 12px">
+                      ${data.closed_appointments[i].date}
+                    </div>
+                </div>
+                <div class="card-action">
+                    <div>
+                    
+                    </div>
+                </div>
+            </div>
+         
+        </a>
+    `;
+      }
+
+
+      showappointmentsHTML += "</div>"
       document.getElementById("Appointments").innerHTML = showappointmentsHTML;
-      document.getElementById("Appointments").style.display = 'none';
+      document.getElementById("Appointments").style.display = 'block';
 
 
     }).catch(err => {
       console.log("Error", err);
     });
 
-
+  openPage('Appointments', document.getElementById("defaultOpen"));
 
 </script>
 {% endblock %}
