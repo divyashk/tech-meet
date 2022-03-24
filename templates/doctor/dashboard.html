@@ -127,56 +127,6 @@
     margin-top: 32px;
   }
 </style>
-<style>
-    .myForm {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    font-size: 0.8em;
-    width: 30em;
-    padding: 1em;
-    }
-    
-    .myForm * {
-    box-sizing: border-box;
-    }
-    
-    .myForm label {
-    padding: 0;
-    font-weight: bold;
-    text-align: right;
-    display: block;
-    }
-    
-    .myForm input,
-    .myForm select,
-    .myForm textarea {
-    margin-left: 2em;
-    float: right;
-    width: 20em;
-    border: 1px solid #ccc;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    font-size: 0.9em;
-    padding: 0.3em;
-    }
-    
-    .myForm textarea {
-    height: 100px;
-    }
-    
-    .myForm button {
-    padding: 1em;
-    border-radius: 0.5em;
-    background: #eee;
-    border: none;
-    font-weight: bold;
-    margin-left: 14em;
-    margin-top: 1.8em;
-    }
-    
-    .myForm button:hover {
-    background: #ccc;
-    cursor: pointer;
-    }
-    </style>
 
 {% endblock %}
 
@@ -188,9 +138,8 @@
 
     <div class="asked_footer">
       <ul>
-        <li><button class="tablink" onclick="openPage('showappointments', this); myFunction1();" id="defaultOpen">Appointments</button></li>
-        <li><button class="tablink" id="leads-tab" onclick="openPage('doctors', this); myFunction2();">Book Appointments </button></li>
-        <li><button class="tablink" id="leads-tab" onclick="openPage('beds', this); myFunction3();"> Inventory </button></li>
+        <li><button class="tablink" onclick="openPage('Appointments', this); " id="defaultOpen">Appointments</button></li>
+       
       </ul>
     </div>
 
@@ -217,17 +166,9 @@
         </div>
       </div>
 
-      <div class="history" id="showappointments" >
+      <div class="doctor" id="Appointments" >
         <!-- Cards will be added here by javascript -->
     </div>
-    
-
-      <div id="bookappointments" class="appointments">
-        
-      </div>
-      <div id="meds" class="Inventory">
-        
-      </div>
     </div>
 
   </div>
@@ -284,40 +225,9 @@
   var leadsData = [];
 
 // toggle function
-  function myFunction1() {
-  var x = document.getElementById("showappointments");
-  var y = document.getElementById("beds");
-  var z = document.getElementById("doctors");
-  x.style.display = "block";
-  y.style.display = "none";
-  z.style.display = "none";
-  var home = document.getElementById("Home");
-  home.style.display = "none";
-}
 
-function myFunction2() {
-  var x = document.getElementById("showappointments");
-  var y = document.getElementById("beds");
-  var z = document.getElementById("doctors");
-  x.style.display = "none";
-  y.style.display = "block";
-  z.style.display = "none";
-  var home = document.getElementById("Home");
-  home.style.display = "none";
-}
 
-function myFunction3() {
-  var x = document.getElementById("showappointments");
-  var y = document.getElementById("beds");
-  var z = document.getElementById("doctors");
-  x.style.display = "none";
-  y.style.display = "none";
-  z.style.display = "block";
-  var home = document.getElementById("Home");
-  home.style.display = "none";
-}
-
-fetch(`/appointment/show_appointments`)
+  fetch(`/show_appointments`)
     .then(res => res.json())
     .then(data => {
       console.log("all appointments data", data);
@@ -350,83 +260,6 @@ fetch(`/appointment/show_appointments`)
   document.getElementById("Appointments").innerHTML=showappointmentsHTML;
   document.getElementById("Appointments").style.display='none';
 
-
-    }).catch(err => {
-      console.log("Error", err);
-    });
-        
-    fetch(`/appointment/show_appointments`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("all appointments data", data);
-      const showappointments=data.open_appointments;
-      
-      let showappointmentsHTML = "";
-
-  for(let i=0; i < showappointments.length; i++) {
-    showappointmentsHTML += `
-    <div class="card horizontal">                      
-            <div class="card-stacked">
-                <div class="card-content">
-                    <div class="card-head"> ${open_appointments[i].desc} </div>
-                    
-                    <div class="address" style="margin-top: 12px">
-                      ${open_appointments[i].date}
-                    </div>
-                </div>
-                <div class="card-action">
-                    <div>
-                    
-                    </div>
-                </div>
-            </div>
-         
-        </div>
-    `;
-  }
-
-  document.getElementById("Appointments").innerHTML=showappointmentsHTML;
-  document.getElementById("Appointments").style.display='none';
-
-
-    }).catch(err => {
-      console.log("Error", err);
-    });
-
-    fetch(`/hospital/${username}/doctors`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("all doctors data", data);
-
-      const allDoctorsData = data.allDoctorsData;
-
-      let allDoctorsDataHTML = "";
-      for(let i=0; i < allDoctorsData.length; i++) {
-        allDoctorsDataHTML += `
-        <div class="card horizontal">                      
-                <div class="card-stacked">
-                    <div class="card-content">
-                        <div class="card-head"> ${allDoctorsData[i].doctor_name} </div>
-                        
-                        <div class="address" style="margin-top: 12px">
-                          ${allDoctorsData[i].degree}
-                        </div>
-                        
-                    </div>
-                    <div class="card-action">
-                      ${allDoctorsData[i].medical_profession}
-                        <div>
-                        
-                        </div>
-                    </div>
-                </div>
-            
-            </div>
-        `;
-      }
-
-      document.getElementById("doctors").innerHTML = allDoctorsDataHTML;
-      document.getElementById("doctors").style.display='none';
 
     }).catch(err => {
       console.log("Error", err);
