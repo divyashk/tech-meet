@@ -1,5 +1,5 @@
 from . import blueprint
-from flask import request
+from flask import request, session
 import requests
 
 appointments_ms = "http://127.0.0.1:5001"
@@ -35,6 +35,7 @@ def close_appointment():
 
 @blueprint.route("/authentication/username", methods=['POST'])
 def check_username():
+  print("Check username exists are left")
   data = request.json
   url = authentication_ms + '/username'
   x = requests.post(url, json = data)
@@ -53,6 +54,7 @@ def login():
   data = request.json
   url = authentication_ms + '/login'
   x = requests.post(url, json = data)
+  session.update(x.json()['session'])
   return x.json()
 
 

@@ -26,6 +26,13 @@ inventory_ms = "http://127.0.0.1:5004"
 """
 Functions
 """
+def role_string(role):
+    if role == 0:
+        return 'patient'
+    if role == 1:
+        return 'doctor'
+    return 'hospital'
+
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -116,64 +123,6 @@ def if_logged_in():
         return jsonify(success=False)
 
 
-@app.route('/username_exists', methods=['POST'])
-def check_if_username_exists():
-    # needs username and check if the username exists or not
-    # returns true and false depending on if it exists
-    # also pass type in the parameters now
-
-    req_data = request.json
-
-    print("Check if username exists")
-
-    if is_user_id_valid(req_data["username"]):
-        userid_ref = db.collection("users").document(
-            req_data['username']).get()
-
-        if userid_ref.exists:
-            print("username exists")
-            if "image" in userid_ref.to_dict():
-                return jsonify(success=True , image=userid_ref.to_dict()["image"])
-            else:
-                return jsonify(success=True, image="")
-        else:
-            print("username doesn't exists")
-            return jsonify(success=False, err_code='1')
-
-    else:
-        return jsonify(success=False, err_code='0')
-
-
-@app.route('/login', methods=['POST'])
-def login_register():
-    '''
-    The main login page which functions using the apis and all
-    '''
-    if "logged_in" in session and session["logged_in"]:
-        return redirect(url_for("profile"))
-
-    data = request.json
-    fire_req_data = db.collection('users').document(
-        data["username"]).get().to_dict()
-    pass_hash = fire_req_data['password']
-
-    if sha256_crypt.verify(data["password"], pass_hash):
-        print("Password match successfully, login the user")
-
-        if data["username"] == "root":
-            # This is a superuser!!
-            session['is_super_user'] = True
-            session['super_user_secret'] = "admin@ppd"
-
-        session['logged_in'] = True
-        session['username'] = data['username']
-        session['role'] = data['role']
-        return jsonify(success=True)
-    else:
-        print("Password does not match")
-        return jsonify(success=False, err="Password does not match")
-
-
 """
 Routes
 """
@@ -188,7 +137,7 @@ def home():
     if ("username" in session):
         username = session["username"]
         role = session["role"]
-        return render_template(role + '/dashboard.html', username=username)
+        return render_template(role_string(role) + '/dashboard.html', username=username)
     else:
         return render_template('login.html', username=username)
 
@@ -197,7 +146,7 @@ def home():
 @is_logged_in
 def get_me():
     role = session['role']
-    return render_template(role + '/profile.html', isMe=True)
+    return render_template(role_string(role) + '/profile.html', isMe=True)
 
 
 @app.route('/login')

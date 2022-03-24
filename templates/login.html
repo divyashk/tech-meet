@@ -197,7 +197,7 @@
             body: JSON.stringify(data),
         }
 
-        fetch('/username_exists', payload)
+        fetch('/authentication/username', payload)
             .then(res => res.json())
             .then(res => {
                 console.log('Yes, check here', res);
@@ -274,7 +274,7 @@
             body: JSON.stringify(data),
         }
 
-        fetch('/login', payload)
+        fetch('/authentication/login', payload)
             .then(res => res.json())
             .then(res => {
                 console.log('Yes, check here', res);
@@ -335,7 +335,7 @@
             body: JSON.stringify(data),
         }
 
-        fetch('/register', payload)
+        fetch('/authentication/create_account', payload)
             .then(res => res.json())
             .then(res => {
                 console.log('Yes, sign up success', res);

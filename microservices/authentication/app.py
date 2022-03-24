@@ -1,5 +1,4 @@
 from flask import Flask, json, render_template, jsonify, request, session, flash, redirect, url_for, send_file
-from pymysql import NULL
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -28,7 +27,7 @@ def is_user_id_valid(uid):
 def add_patient_to_db(user_id="" , patient_data=""):
     # Add patient_data to patient's collection and also store "user_id"
 
-    if(user_id is not '' and patient_data is not ''):
+    if(user_id != '' and patient_data != ''):
         db.collection("patient").document(user_id).set(patient_data, merge=True)
         return True
     else:
@@ -39,7 +38,7 @@ def add_patient_to_db(user_id="" , patient_data=""):
 
 def add_doctor_to_db(user_id ="", doctor_data=""):
     # Add doctor_data to doctor's collection and also store "user_id"
-    if(user_id is not '' and doctor_data is not ''):
+    if(user_id != '' and doctor_data != ''):
         db.collection("doctor").document(user_id).set(doctor_data, merge=True)
         return True
     else:
@@ -47,7 +46,7 @@ def add_doctor_to_db(user_id ="", doctor_data=""):
 
 def add_hospital_to_db(user_id ="", hospital_data=""):
     # Add hospital_data to hospital's collection and also store "user_id"
-    if(user_id is not '' and hospital_data is not ''):
+    if(user_id != '' and hospital_data != ''):
         db.collection("hospital").document(user_id).set(hospital_data, merge=True)
         return True
     else:
@@ -150,13 +149,41 @@ def user_login():
         #     session['is_super_user'] = True
         #     session['super_user_secret'] = "admin@ppd"
 
-        # session['logged_in'] = True
-        # session['username'] = data['username']
-        # session['type'] = data['type']
-        return jsonify(success=True, role = fire_req_data['role'])
+        session['logged_in'] = True
+        session['username'] = fire_req_data['username']
+        session['role'] = fire_req_data['role']
+        return jsonify(success=True, session=session)
     else:
         print("Password does not match")
-        return jsonify(success=False, err="Password does not match",role=NULL)
+        return jsonify(success=False, err="Password does not match")
+
+
+@app.route('/username', methods=['POST'])
+def check_if_username_exists():
+    # needs username and check if the username exists or not
+    # returns true and false depending on if it exists
+    # also pass type in the parameters now
+    req_data = request.json
+
+    print("Check if username exists")
+
+    if is_user_id_valid(req_data["username"]):
+        userid_ref = db.collection("users").document(
+            req_data['username']).get()
+
+        if userid_ref.exists:
+            print("username exists")
+            if "image" in userid_ref.to_dict():
+                return jsonify(success=True , image=userid_ref.to_dict()["image"])
+            else:
+                return jsonify(success=True, image="")
+        else:
+            print("username doesn't exists")
+            return jsonify(success=False, err_code='1')
+
+    else:
+        return jsonify(success=False, err_code='0')
+
 
 # Main
 if __name__ == '__main__':
