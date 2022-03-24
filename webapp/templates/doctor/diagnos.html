@@ -83,6 +83,10 @@
         padding: 32px 20px;
         height: 100%;
     }
+
+    #pres-table {
+        margin-bottom: 8px;
+    }
 </style>
 <link rel="stylesheet" href="/static/frontend/css/comments.css">
 
@@ -93,10 +97,10 @@
 <div id="main" class="container">
     <div id="find_loc" class="d-flex w-50">
         <div id="find_loc_heading">
-            <h4>Diagnos</h4>
+            <h4> Diagnosis </h4>
         </div>
 
-        <div class="row">
+        <div class="">
             <div class="col s12">
                 <div class="row">
                     <div class="input-field col s12">
@@ -109,23 +113,25 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="">
             <div class="col s12">
                 <div class="row">
-                    <div class="input-field col s12">
-                        <i class="material-icons prefix"></i>
-                        <select id="autocomplete-input-state">
-                            <option value="" disabled selected>Quantity</option>
-                        </select>
+                    <div class="input-field col s12" style="">
+                        <input id="last_name" type="number" class="validate">
+                        <label for="last_name">Enter quantity</label>
                     </div>
                 </div>
             </div>
         </div>
 
 
-        <a id="close" class="waves-effect waves-light btn">Add Prescription</a>
+        <button id="add-pres" class="waves-effect waves-light btn">Add Prescription</button>
 
         <br><br>
+
+        <div id="pres-table">
+            <!-- added by js -->
+        </div>
 
         <div id="loading-anim" style="text-align: center; display: none;">
             <div class="preloader-wrapper small active">
@@ -143,128 +149,8 @@
             </div>
         </div>
 
-        <a id="find-btn" class="waves-effect waves-light btn">Close Appointment</a>
+        <a id="appoint-btn" class="waves-effect waves-light btn">Close Appointment</a>
     </div> <!-- End of find loc -->
-
-    <div id="leads-container" style="display: none;">
-        <div style="display: flex;">
-            <h4 id="leads-heading">Oxygen Clinders</h4>
-            <div style="margin-left: auto; margin-top: 1.52rem;">
-                <a class="btn waves-effect waves-light" href="/">Search another</a>
-            </div>
-        </div>
-
-        <div id="leads-show" class="row"></div>
-    </div>
-
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal">
-        <div class='wrapper-tab-btn-link'>
-            <ul style="display: inline-flex;">
-                <li><button class="tablink" onclick="openPage('reviews-tab', this)" id="defaultOpen">Comments</button>
-                </li>
-                <li><button class="tablink" id="leads-tab" onclick="openPage('upvotes-tab', this)"> Upvotes </button>
-                </li>
-                <li><button class="tablink" id="leads-tab" onclick="openPage('image-reviews-tab', this)"> Image Reviews
-                    </button></li>
-            </ul>
-        </div>
-        <div id="reviews-tab" class="tabcontent">
-
-
-            <div class="modal-content">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">
-                    <span class="material-icons">close</span>
-                </a>
-            </div>
-
-
-            <div id="live-chat">
-                <div class="chat">
-                    <div id="post-comments" class="chat-history">
-
-                    </div>
-                </div>
-            </div>
-
-            <div id="comment-load" class="progress" style="margin: 0.5rem; display: none;">
-                <div class="indeterminate"></div>
-            </div>
-
-            {% if(username) %}
-            <form onsubmit="handleSendComment(event)" class="modal-footer">
-                <div class="input-field inline">
-                    <input id="comment_inline" type="text" class="validate">
-                    <label for="comment_inline">Enter comment</label>
-                </div>
-                <button type="submit" class="submit waves-effect waves-green btn-flat">
-                    <span class="material-icons" style="vertical-align: bottom;"> send </span>
-                </button>
-            </form>
-            {% endif %}
-
-        </div>
-
-        <div id="upvotes-tab" class="tabcontent">
-            <div class="modal-content">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">
-                    <span class="material-icons">close</span>
-                </a>
-            </div>
-            <div class="upvotes-tab-wrapper">
-                <div class="votes-tab-names">
-                    <h4>Upvoted by</h4>
-                    <div style="overflow-y: scroll; height:100%">
-                        <ul class="widget-list" id="upvoters">
-                            <li>
-                                <a class="widget-list-link">
-                                    <img src="http://www.gravatar.com/avatar/47?f=y&amp;s=64&amp;d=identicon">
-                                    Manager #1 <span>481 followers</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="votes-tab-names">
-                    <h4>Downvoted by</h4>
-                    <div style="overflow-y: scroll; height:100%">
-                        <ul class="widget-list" id="downvoters">
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="image-reviews-tab" class="tabcontent">
-            <div class="modal-content">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">
-                    <span class="material-icons">close</span>
-                </a>
-            </div>
-            <div class="image-reviews-slideshow" id="review-images">
-                <!-- Write code for image reviews image-reviews-slideshow -->
-            </div>
-
-            {% if(username) %}
-            <form onsubmit="handleImageUpload(event)" class="modal-footer">
-                <div class="input-field inline">
-                    <div class="btn" style="margin-right: 12%;">
-                        <span>Upload Review Image</span>
-                        <input id="upload-review-image" type="file" accept="image/*">
-                    </div>
-                    <div class="file-path-wrapper">
-                        <input id="pp-input" class="file-path validate" type="text">
-                    </div>
-                </div>
-                <button type="submit" class="submit waves-effect waves-green btn-flat">
-                    <span class="material-icons" style="vertical-align: bottom;"> send </span>
-                </button>
-            </form>
-            {% endif %}
-        </div>
-
-
-    </div>
 
 </div> <!-- End of main -->
 
@@ -275,11 +161,45 @@
 
 <script>
 
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
-    document.getElementById("close").onclick = function () { myFunction() };
-    function myFunction() {
-        document.getElementById("close").innerHTML = "YOU CLICKED ME!";
+    let presciptionData = [];
+
+    document.getElementById("add-pres").onclick = function () {
+        console.log("Hello");
+
+        presciptionData.push({
+            medId: document.getElementById('autocomplete-input-item').value,
+            name: document.getElementById('autocomplete-input-item').value,
+            quantity: document.getElementById('last_name').value
+        });
+
+        let tBody = ``;
+
+        console.log("pres data", presciptionData);
+
+        for (let i = 0; i < presciptionData.length; i++) {
+            tBody += `
+            <tr>
+                <td>${presciptionData[i].name}</td>
+                <td>${presciptionData[i].quantity}</td>
+            </tr>`;
+        }
+
+        let presHTML = `
+        <table>
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Qauntity</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            ${tBody}
+        </tbody>
+      </table>
+      `;
+
+        document.getElementById('pres-table').innerHTML = presHTML;
 
     }
 
@@ -304,6 +224,10 @@
 
         // Add the specific color to the button used to open the tab content
         elmnt.style.backgroundColor = "#26a69a";
+    }
+
+    document.getElementById('appoint-btn').onclick = function() {
+        console.log("Close appointment called");
     }
 
 
@@ -345,14 +269,14 @@
 
         var optionsToAdd = "<option value=\"\" disabled selected>Choose Medicine</option>";
 
-        // querySnapshot.forEach((doc) => {
-        //     // console.log(doc.id, " => ", doc.data());
-        //     optionsToAdd += "<option value=\"" + doc.id + "\"> " + doc.id + " </option>"
-        // });
+        for (let id in data) {
+            // console.log(doc.id, " => ", doc.data());
+            optionsToAdd += "<option value=\"" + id + "\"> " + data[id].name + " </option>"
+        }
 
         // Now update the options
-        $("#autocomplete-input-city").html(optionsToAdd);
-        $("#autocomplete-input-city").trigger('contentChanged');
+        $("#autocomplete-input-item").html(optionsToAdd);
+        $("#autocomplete-input-item").trigger('contentChanged');
     });
 
     $(document).ready(function () {
@@ -389,84 +313,6 @@
             var instance = M.Modal.getInstance(document.getElementById("modal1"));
             instance.open();
         }
-
-        $("#autocomplete-input-item").on('change', function () {
-            const itemSelected = $(this).val();
-
-            // Update the heading
-            byId("leads-heading").innerHTML = itemSelected;
-
-            globalItem = itemSelected;
-
-            // We need to find the number of subcollections from python
-            const data = { item: itemSelected };
-
-            showAnimation();
-            //fetch the Doctor data from backend
-            fetch('/get_states', {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-
-                    var optionsToAdd = ""; //<option value=\"\" disabled selected>Choose State</option>
-
-                    // Update the city
-                    $("#autocomplete-input-city").html(optionsToAdd);
-                    $("#autocomplete-input-city").trigger('contentChanged');
-
-                    data.states.forEach((val) => {
-                        // console.log(doc.id, " => ", doc.data());
-                        optionsToAdd += "<option value=\"" + val + "\"> " + val + " </option>"
-                    });
-
-                    // Now update the options
-                    $("#autocomplete-input-state").html(optionsToAdd);
-                    $("#autocomplete-input-state").trigger('contentChanged');
-
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                }).finally(() => {
-                    hideAnimation();
-                });
-        });
-
-        $("#autocomplete-input-state").on('change', function () {
-            const itemSelected = $(this).val();
-            globalState = itemSelected;
-
-            showAnimation();
-
-            db.collection("Inventory").doc(globalItem).collection(globalState).get()
-                .then((querySnapshot) => {
-
-                    console.log("Query snapshot of city");
-                    // Loop in each query snapshot and add options in autocomplete-input-item
-
-                    var optionsToAdd = "<option value=\"\" disabled selected>Choose City</option>";
-
-                    querySnapshot.forEach((doc) => {
-                        // console.log(doc.id, " => ", doc.data());
-                        optionsToAdd += "<option value=\"" + doc.id + "\"> " + doc.id + " </option>"
-                    });
-
-                    // Now update the options
-                    $("#autocomplete-input-city").html(optionsToAdd);
-                    $("#autocomplete-input-city").trigger('contentChanged');
-                })
-                .catch((err) => {
-                    console.log("Error came while fetching data", err);
-                }).finally(() => {
-                    hideAnimation();
-                });
-
-        });
     });
 
 </script>
