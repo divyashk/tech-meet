@@ -188,17 +188,16 @@ def get_all_meds(id):
 
 @app.route('/hospital/<id>/doctors')
 def get_all_doctors(id):
-    allDoctorsData = [
-        {
-            "username": "doc_username1",
-            "doctor_name": "doc NAme",
-            "degree": "Desgree",
-            "medical_profession": "Helo",
-            "phone_no": "9811417932"
-        }
-    ]
-
-    #TODO VINAYAK used in hospital home page
+    # allDoctorsData = [
+    #     {
+    #         "username": "doc_username1",
+    #         "doctor_name": "doc NAme",
+    #         "degree": "Desgree",
+    #         "medical_profession": "Helo",
+    #         "phone_no": "9811417932"
+    #     }
+    # ]
+    allDoctorsData=db.collection('hospital').document(id).get().to_dict()['doctors_username']
 
     return jsonify(success=True, allDoctorsData=allDoctorsData)
 

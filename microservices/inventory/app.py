@@ -76,30 +76,15 @@ def fetch_item_from_inv(dispensary,item_name):
     item=db.collection('dispensary').document(dispensary).where(u'medId', u'==',item_name).get().to_dict()
     return jsonify(success=True,item=item)
 
-# TODO
 @app.route('/hospital/<hosp_id>/getall', methods=['POST'])
 def get_all_meds(hosp_id):
-    disp_id=db.collection('hospital').document(hosp_id).get().to_dict()['dispensary']
-    meds=db.collection('dispensary').document(disp_id).get().to_dict()
-
-    # TODO VINAYAK change schema to 
-    allMedsData = [
-        {
-            "id": "some unique 1",
-            "item_name": "paracetemol",
-            "quantity": 10,
-            "price": "Rs 100"
-        },
-        {
-            "id": "some unique 2",
-            "item_name": "Dolo 650",
-            "quantity": 7,
-            "price": "Rs 50"
-        }
-    ]
-
-    return jsonify(success=True,meds=meds)
+    try:
+        disp_id=db.collection('hospital').document(hosp_id).get().to_dict()['dispensary'][0]
+        allMedsData=db.collection('dispensary').document(disp_id).get().to_dict()
+        return jsonify(success=True,allMedsData=allMedsData)
+    except:
+        return jsonify(success=False)
 
 # Main
 if __name__ == '__main__':
-    app.run(debug=True , port = 5000)
+    app.run(debug=True , port = 5004)
