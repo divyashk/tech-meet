@@ -22,7 +22,6 @@ def is_user_id_valid(uid):
         return False
     return True
 
-# @app.route('/test', methods=['GET'])
 # Functions
 def add_patient_to_db(user_id="" , patient_data=""):
     # Add patient_data to patient's collection and also store "user_id"
@@ -34,7 +33,6 @@ def add_patient_to_db(user_id="" , patient_data=""):
         return False
     # data={"age":"26","gender":"M","nhid":"_testing","password":"password test","patient_address":"xyz,abc","patient_name":"Mr X","phone_number":"9876543210","username":"_testing"}
     # db.collection("patient").document("_testing").set(data, merge=True)
-
 
 def add_doctor_to_db(user_id ="", doctor_data=""):
     # Add doctor_data to doctor's collection and also store "user_id"
@@ -77,6 +75,7 @@ def register_user():
     - Rest any other details like name, etc
     '''
     data = request.json
+    print(data)
     compulsary_items = ["username", "password", "role"] # username and email are same
 
     for item in compulsary_items:
@@ -149,14 +148,10 @@ def user_login():
         #     session['is_super_user'] = True
         #     session['super_user_secret'] = "admin@ppd"
 
-        session['logged_in'] = True
-        session['username'] = fire_req_data['username']
-        session['role'] = fire_req_data['role']
-        return jsonify(success=True, session=session)
+        return jsonify(success=True, role = fire_req_data['role'])
     else:
         print("Password does not match")
         return jsonify(success=False, err="Password does not match")
-
 
 @app.route('/username', methods=['POST'])
 def check_if_username_exists():
@@ -164,9 +159,6 @@ def check_if_username_exists():
     # returns true and false depending on if it exists
     # also pass type in the parameters now
     req_data = request.json
-
-    print("Check if username exists")
-
     if is_user_id_valid(req_data["username"]):
         userid_ref = db.collection("users").document(
             req_data['username']).get()
@@ -184,7 +176,6 @@ def check_if_username_exists():
     else:
         return jsonify(success=False, err_code='0')
 
-
 # Main
 if __name__ == '__main__':
-    app.run(debug=True , port = 5000)
+    app.run(debug=True , port = 5002)
