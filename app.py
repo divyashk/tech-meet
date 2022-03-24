@@ -25,6 +25,10 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
+appointments_ms = "127.0.0.1:5001"
+authentication_ms = "127.0.0.1:5002"
+# infra_ms = "127.0.0.1:5003"
+inventory_ms = "127.0.0.1:5004"
 
 """
 Functions
@@ -326,6 +330,17 @@ def dashboard_route():
     }
 
     return render_template('hospital_dashboard.html', hospital_data = hospital_data)
+
+
+"""Testing APIs in Microservices"""
+import requests
+
+url = 'https://www.w3schools.com/python/demopage.php'
+myobj = {'somekey': 'somevalue'}
+
+x = requests.post(url, data = myobj)
+
+print(x.text)
 
 """
 Main 

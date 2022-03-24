@@ -72,4 +72,4 @@ def get_all_meds(hosp_id):
 
 # Main
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True , port = 5004)
