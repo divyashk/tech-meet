@@ -127,3 +127,10 @@ def medicines():
   url = inventory_ms + '/medicines'
   x = requests.get(url)
   return x.json()
+
+@blueprint.route('/hospital/<hosp_id>/getall', methods=['POST'])
+def hospital_getall(hosp_id):
+  data = request.json
+  url = inventory_ms + '/hospital/' + hosp_id + '/getall'
+  x = requests.post(url , json = data)
+  return x.json()
