@@ -1,0 +1,60 @@
+{% extends 'layouts/base.html' %}
+
+{% block css %}
+<style>
+    #header {
+        margin-bottom: 24px;
+        display: flex;
+        flex-flow: row;
+    }
+
+    .right {
+        margin-left: auto;
+    }
+
+    #find_loc_heading {
+        margin-bottom: 12px;
+    }
+
+    .login-btn-con {
+        width: 100%;
+        margin: 8px 0;
+    }
+
+    .login-btn-con a {
+        width: 100%;
+    }
+</style>
+<link rel="stylesheet" href="/static/frontend/css/comments.css">
+
+{% endblock %}
+
+{% block body %}
+
+<div id="main" class="container">
+    
+    <div id="find_loc" class="d-flex w-50">
+
+        <div id="find_loc_heading">
+            <h4>Login or Sign Up</h4>
+        </div>
+
+        <div class="login-btn-con">
+            <a href="/patient/login" class="waves-effect waves-light btn">Patient</a>
+        </div>
+        <div class="login-btn-con">
+            <a href="/doctor/login" class="waves-effect waves-light btn blue lighten-1">Doctor</a>
+        </div>
+        <div class="login-btn-con">
+            <a href="/hospital/login" class="waves-effect waves-light btn red lighten-1">Hospital</a>
+        </div>
+    </div> <!-- End of find loc -->
+</div> <!-- End of main -->
+
+
+{% endblock %}
+
+{% block js %}
+
+
+{% endblock %}

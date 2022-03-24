@@ -1,0 +1,7 @@
+flask
+firebase-admin
+passlib
+gunicorn
+pandas
+pyyaml
+python-dotenv
