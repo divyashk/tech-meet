@@ -37,3 +37,26 @@ http {
         }
 }
 ```
+
+## Microservices and APIs
+
+#### Appointments Microservice 
+
+1. `/appointments/book_appointment` : POST request made by a patient. Accepts data for creating an appointment and creates a new appointment document in the appointments collection
+2. `/appointments/show_appointments` : POST request made either by patient or doctor. Shows all the active and pass appointments, and sends the data as json
+3. `/appointments/close_appointment` : POST request made by the doctor who sends his inputs on the appointment and then adds the prescription and description to the database 
+
+#### Authentication Microservice 
+
+1. `/authentication/username` : POST request made by any user. Checks if the username exists in the database or not
+2. `/authentication/create_account` : POST request made by user to create a new user in the database
+3. `/authentication/login` : POST request which accepts username and password, hashes the password and matches it in the database and then returns data.
+
+#### Inventory Microservice 
+
+1. `/inventory/medicines` : GET request which returns all the possible medicines and their descriptions
+2. `/hospital/<hosp_id>/getall` : Accepts hospital id and returns details of all the doctors associated with that hospital
+3. `/inventory/hospital/:hosp_id/getall` : POST request which accepts hospital id and returns all details of the doctors and their slots
+
+
+ 
